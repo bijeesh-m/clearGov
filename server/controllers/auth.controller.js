@@ -1,0 +1,65 @@
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const { sign } = require("jsonwebtoken");
+
+///////////////////////////// REGISTER ////////////////////////////////
+
+module.exports.register = async (req, res) => {
+    console.log(req.body);
+    try {
+        const isExist = await User.findOne({ email: req.body.email });
+
+        if (isExist) {
+            return res.status(409).json({ message: "User already exists", status: "failed" });
+        }
+        const user = new User({ ...req.body, role: req.body.role });
+        user.save();
+        res.status(201).json({ message: "Registration success", user: user });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message, status: "failed" });
+    }
+};
+
+///////////////////////////// LOGIN ////////////////////////////////
+
+module.exports.login = async (req, res) => {
+    console.log("hi from login");
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json({ message: "user not found", status: "failed" });
+        }
+        if (!user.isActive) {
+            return res.status(403).json({ message: "user account is blocked", status: "failed" });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "invalid credentials", status: "failed" });
+        }
+        const token = sign({ userId: user._id, role: user.role }, process.env.SECRET_KEY, { expiresIn: "5hr" });
+        res.cookie("accessToken", token, { httpOnly: true, maxAge: 3600000 });
+        res.status(200).json({ message: "login success", token, role: user.role, user });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message, status: "failed" });
+    }
+};
+
+module.exports.getProfile = async (req, res) => {
+    console.log("this is from me!");
+    try {
+        const user = await User.findById(req.user.userId);
+        res.status(200).json({ message: "success", user });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+///////////////////////////// LOGOUT ////////////////////////////////
+
+module.exports.logout = async (req, res) => {
+    res.clearCookie("accessToken");
+    res.status(200).json({ message: "Successfully logged out" });
+};
