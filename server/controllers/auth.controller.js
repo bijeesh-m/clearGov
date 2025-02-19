@@ -24,7 +24,6 @@ module.exports.register = async (req, res) => {
 ///////////////////////////// LOGIN ////////////////////////////////
 
 module.exports.login = async (req, res) => {
-    console.log("hi from login");
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email: email });
@@ -47,8 +46,9 @@ module.exports.login = async (req, res) => {
     }
 };
 
+//////////////////////// Get logined user profile //////////////////////
+
 module.exports.getProfile = async (req, res) => {
-    console.log("this is from me!");
     try {
         const user = await User.findById(req.user.userId);
         res.status(200).json({ message: "success", user });
@@ -63,6 +63,9 @@ module.exports.logout = async (req, res) => {
     res.clearCookie("accessToken");
     res.status(200).json({ message: "Successfully logged out" });
 };
+
+
+////////////////// ADMIN LOGIN //////////////////////////
 
 module.exports.adminLogin = async (req, res) => {
     console.log("form admin login");

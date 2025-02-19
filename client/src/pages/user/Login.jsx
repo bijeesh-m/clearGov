@@ -27,17 +27,15 @@ const Login = () => {
             success: (res) => {
                 localStorage.setItem("accessToken", res.data.token);
                 dispatch(addUser(res.data.user));
-                setTimeout(() => {
+                // setTimeout(() => {
                     if (res.data.role === "Government Authority") {
                         window.location.replace("/authority");
-                    } else if (res.data.role === "Admin") {
-                        window.location.replace("/admin/dashboard");
-                    } else if (res.data.role === "Contractor") {
+                    }  else if (res.data.role === "Contractor") {
                         window.location.replace("/contractor");
                     } else {
                         window.location.replace("/");
                     }
-                }, 100);
+                // }, 1000);
                 return <b>Login success</b>;
             },
             error: (err) => <b>{err.response.data.message}</b>,

@@ -10,7 +10,6 @@ const dbConnect = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-
 const app = express();
 
 app.use(express.json());
@@ -29,6 +28,3 @@ app.use("/govauth", govauthRoute);
 app.listen(process.env.PORT, () => {
     console.log(`server is running on port ${process.env.PORT}`);
 });
-
-
-
