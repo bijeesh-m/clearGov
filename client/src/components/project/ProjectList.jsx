@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ProjectList = ({ projects }) => {
+const ProjectList = ({ projects, projectProgress }) => {
     return (
         <div className=" space-y-2 ">
             <h1 className=" text-4xl">Projeccts</h1>

@@ -7,19 +7,21 @@ import toast from "react-hot-toast";
 const UserList = ({ users, setUsers }) => {
     const [searchQuerry, setSearchQuerry] = useState("");
     const [uidForDelete, setUidForDelete] = useState(null);
+    const [statusFilter, setStatusFilter] = useState("All"); // State for status filter
 
-
+    // Filter users based on search query and status
     const filteredUsers = useMemo(() => {
         return users.filter((user) => {
-            return user.username?.toLowerCase().includes(searchQuerry.toLowerCase());
+            const matchesSearch = user.username?.toLowerCase().includes(searchQuerry.toLowerCase());
+            const matchesStatus =
+                statusFilter === "All" || (statusFilter === "Active" ? user.isActive : !user.isActive);
+            return matchesSearch && matchesStatus;
         });
-    }, [searchQuerry, users]);
+    }, [searchQuerry, users, statusFilter]);
 
-    // delete a user
-
+    // Delete a user
     const handleDelete = () => {
         try {
-            console.log(uidForDelete);
             axios
                 .delete(`/admin/users/${uidForDelete}/delete`)
                 .then((res) => {
@@ -34,6 +36,7 @@ const UserList = ({ users, setUsers }) => {
         }
     };
 
+    // Toggle user status
     const handleUserStatus = (e, userId) => {
         axios
             .put(`/admin/users/${userId}/status`)
@@ -48,52 +51,52 @@ const UserList = ({ users, setUsers }) => {
     };
 
     return (
-        <div className="  min-h-screen px-5 sm:px-10 md:px-20 py-8 ">
+        <div className="min-h-screen px-5 sm:px-10 md:px-20 py-8">
             <div className="">
-                <div className=" flex justify-between items-center ">
-                    <div className=" relative w-fit ">
+                <div className="flex justify-between items-center">
+                    <div className="relative w-fit">
                         <input
-                            className=" my-3 rounded-md px-3 py-1 border-b outline-none"
+                            className="my-3 rounded-md px-3 py-1 border-b outline-none"
                             value={searchQuerry}
                             onChange={(e) => setSearchQuerry(e.target.value)}
-                            placeholder=" Search users"
+                            placeholder="Search users"
                             type="text"
                             name="searchquerry"
                             id="searchquerry"
                         />
-                        <img className=" w-6 absolute  top-4 right-2 " src="/assets/search.svg" alt="search icon" />
+                        <img className="w-6 absolute top-4 right-2" src="/assets/search.svg" alt="search icon" />
                     </div>
-                    <div className=" relative font-medium   w-fit  flex flex-col justify-center items-center sm:block">
-                        Filter By :
+                    <div className="relative font-medium w-fit flex flex-col justify-center items-center sm:block">
+                        Filter By:
                         <select
                             className="ml-1 rounded-md px-3 py-1 outline-none text-sm select select-sm select-bordered"
                             name="filterBy"
                             id="filterBy"
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
                         >
+                            <option value="All">All</option>
                             <option value="Active">Active</option>
                             <option value="Non-Active">Non-Active</option>
                         </select>
-                        <button className="btn btn-xs sm:btn-sm btn-outline ml-2  ">
+                        <button className="btn btn-xs sm:btn-sm btn-outline ml-2">
                             <Link to={"/admin/dashboard/add-user"}>Add User</Link>
                         </button>
                     </div>
                 </div>
-                <div className=" mx-auto ">
-                    <div className="p-4   rounded-lg border bg-white  shadow-md sm:p-8 d ">
+                <div className="mx-auto">
+                    <div className="p-4 rounded-lg border bg-white shadow-md sm:p-8">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold leading-none text-gray-900">Latest Customers</h3>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                            >
+                            <a href="#" className="text-sm font-medium text-blue-600 hover:underline">
                                 View all
                             </a>
                         </div>
                         <div className="flow-root overflow-x-auto">
-                            <ul role="list" className=" divide-gray-200 ">
+                            <ul role="list" className="divide-gray-200">
                                 {filteredUsers.map((user) => {
                                     return (
-                                        <li key={user._id} className="py-3 sm:py-4 border-b ">
+                                        <li key={user._id} className="py-3 sm:py-4 border-b">
                                             <div className="flex items-center space-x-4">
                                                 <div className="flex-shrink-0">
                                                     <img
@@ -103,30 +106,26 @@ const UserList = ({ users, setUsers }) => {
                                                     />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-medium text-gray-900 truncate ">
+                                                    <p className="text-sm font-medium text-gray-900 truncate">
                                                         {user.username}
                                                     </p>
-                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                                                        {user.email}
-                                                    </p>
+                                                    <p className="text-sm text-gray-500 truncate">{user.email}</p>
                                                 </div>
-
-                                                <div className=" flex-1 items-center text-base font-semibold text-gray-900 ">
+                                                <div className="flex-1 items-center text-base font-semibold text-gray-900">
                                                     {user.role}
                                                 </div>
-                                                <div className=" items-center text-base flex gap-2 font-semibold  ">
+                                                <div className="items-center text-base flex gap-2 font-semibold">
                                                     {user.isActive ? "Active" : "Disabled"}
                                                     <input
                                                         type="checkbox"
                                                         onChange={(e) => handleUserStatus(e, user._id)}
-                                                        className={`toggle toggle-success`}
+                                                        className="toggle toggle-success"
                                                         defaultChecked={user.isActive}
                                                     />
                                                 </div>
-
                                                 <img
                                                     src="/assets/trash.svg"
-                                                    className=" cursor-pointer"
+                                                    className="cursor-pointer"
                                                     onClick={() => {
                                                         document.getElementById("my_modal_5").showModal();
                                                         setUidForDelete(user._id);
@@ -143,11 +142,10 @@ const UserList = ({ users, setUsers }) => {
                                                         </p>
                                                         <div className="modal-action">
                                                             <form method="dialog">
-                                                                {/* if there is a button in form, it will close the modal */}
                                                                 <button className="btn">Cancel</button>
                                                                 <button
-                                                                    onClick={() => handleDelete(user._id)}
-                                                                    className="btn bg-red-500 ml-2 text-white "
+                                                                    onClick={handleDelete}
+                                                                    className="btn bg-red-500 ml-2 text-white"
                                                                 >
                                                                     Delete
                                                                 </button>
@@ -166,13 +164,12 @@ const UserList = ({ users, setUsers }) => {
                                                         <UserEditForm />
                                                         <div className="modal-action">
                                                             <form method="dialog">
-                                                                {/* if there is a button, it will close the modal */}
                                                                 <button className="btn">Close</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </dialog>
-                                                <div className=" items-center text-base font-semibold text-gray-500 ">
+                                                <div className="items-center text-base font-semibold text-gray-500">
                                                     <Link to={`/admin/dashboard/user/${user._id}`}>View</Link>
                                                 </div>
                                             </div>
@@ -180,7 +177,7 @@ const UserList = ({ users, setUsers }) => {
                                     );
                                 })}
                                 {filteredUsers.length === 0 && (
-                                    <h1 className=" font-bold text-center text-red-500 text-xl">No users found!</h1>
+                                    <h1 className="font-bold text-center text-red-500 text-xl">No users found!</h1>
                                 )}
                             </ul>
                         </div>

@@ -25,7 +25,7 @@ const TenderView = () => {
     }, [tenderId]);
 
     return (
-        <div className="max-w-4xl mx-auto tender-details mb-96 p-5 bg-white rounded-lg ">
+        <div className="max-w-4xl mx-auto tender-details mb-96 my-3 p-5  rounded-lg ">
             <h1 className="text-2xl font-bold mb-4">Tender Details</h1>
             <div className=" flex flex-col gap-4 mb-4 ">
                 <div className="card bg-gray-50 p-4 rounded-lg leading-10">
@@ -75,7 +75,7 @@ const TenderView = () => {
                     <h2 className="text-lg md:text-xl border-b border-gray-300 my-1 pb-2 font-bold text-orange-600 ">
                         Work item details
                     </h2>
-                    <div className=" my-5 grid md:grid-cols-2 gap-2 md:gap-6  text-sm md:text-lg ">
+                    <div className=" my-5 grid  gap-2 md:gap-6  text-sm md:text-lg ">
                         <div className=" flex flex-col gap-2">
                             <p className=" flex gap-2 p-2 bg-gray-100 rounded-sm">
                                 <strong className=" text-blue-950">Title:</strong>
@@ -103,23 +103,14 @@ const TenderView = () => {
                                 {tender?.paymentMode}
                             </p>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <p className=" p-2 bg-gray-100 rounded-sm">
-                                <strong className=" text-blue-950">Form Of Contract:</strong>
-                                {tender?.formOfContract}
-                            </p>
-
-                            <p className=" p-2 bg-gray-100 rounded-sm">
-                                <strong className=" text-blue-950">No. of Covers:</strong> {tender?.numberOfCovers}
-                            </p>
-                        </div>
+                        
                     </div>
                 </div>
                 <div className="card bg-gray-50 p-4 rounded-lg leading-10">
                     <h2 className="text-lg md:text-xl border-b border-gray-300 my-1 pb-2 font-bold text-orange-600 ">
                         Critical Dates
                     </h2>
-                    <div className=" my-5 grid md:grid-cols-2 gap-2 md:gap-6  text-sm md:text-lg ">
+                    <div className=" my-5   gap-2 md:gap-6  text-sm md:text-lg ">
                         <div className=" flex flex-col gap-2">
                             <p className=" flex gap-2 p-2 bg-gray-100 rounded-sm">
                                 <strong className=" text-blue-950">Bid opening date:</strong>

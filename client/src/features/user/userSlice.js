@@ -5,7 +5,7 @@ const { useEffect, useContext } = require("react");
 
 const userSlice = createSlice({
     name: "user",
-    initialState: {},
+    initialState:{},
     reducers: {
         addUser: (state, actions) => (state = actions.payload),
         removeUser:(state, actions) => (state = {}),

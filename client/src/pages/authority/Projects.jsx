@@ -4,6 +4,7 @@ import axios from "../../config/axios.config";
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
+    const [projectProgress, setProjectProgress] = useState([]);
 
     useEffect(() => {
         axios
@@ -16,6 +17,8 @@ const Projects = () => {
                 console.log(err);
             });
     }, []);
+
+    
     return (
         <div>
             <ProjectList projects={projects} />

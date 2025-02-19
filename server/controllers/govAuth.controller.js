@@ -1,5 +1,6 @@
 const Project = require("../models/project");
 // const Expense = require('../models/Expense');
+const Bid = require("../models/bidModel");
 
 // Project Initiators
 exports.createProject = async (req, res) => {
@@ -35,7 +36,7 @@ module.exports.getProjects = async (req, res) => {
 
 module.exports.getProjectById = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Project.findById(req.params.id).populate("tenders");
         if (!project) return res.status(404).json({ error: "Project not found" });
         res.status(200).json({ message: "Success", project });
     } catch (error) {
@@ -132,5 +133,24 @@ module.exports.getBudgetAnalysis = async (req, res) => {
         res.status(200).json({ totalSpent: totalBudget[0]?.totalSpent || 0 });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports.bids = async (req, res) => {
+    try {
+        const bids = await Bid.find().populate("tender").populate("contractor");
+        res.status(200).json({ message: "success", bids });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching bids under review", error: error.message });
+    }
+};
+
+module.exports.approveBid = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const bid = await Bid.findByIdAndUpdate(req.params.bidId, { bidStatus: status,notes:"Your" }, { new: true });
+        res.status(200).json({message:"Bid approved success"});
+    } catch (error) {
+        res.status(500).json({ message: "Error updating bid status", error: error.message });
     }
 };

@@ -4,13 +4,14 @@ import { Outlet } from "react-router-dom";
 import Footer from "../components/admin/Footer";
 
 const AdminLayout = () => {
+
     return (
         <div>
-            {/* <Header /> */}
+            <Header />
             {/* <div className="pt-20"> */}
             <Outlet />
             {/* </div> */}
-            {/* <Footer /> */}
+            <Footer />
         </div>
     );
 };

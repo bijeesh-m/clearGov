@@ -87,13 +87,13 @@ const Tenders = () => {
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                                     <a
-                                        href={`/contractor/bid-submission/${tender._id}`}
+                                        href={`/contractor/bid-submission/${tender.tenderID}`}
                                         className="text-blue-600 hover:text-blue-900 mr-4"
                                     >
                                         Apply Now
                                     </a>
                                     <a
-                                        href={`/contractor/tenders/${tender._id}`}
+                                        href={`/admin/dashboard/tender/${tender.tenderID}`}
                                         className="text-gray-600 hover:text-gray-900"
                                     >
                                         View Details

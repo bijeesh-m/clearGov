@@ -1,8 +1,8 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const cloudinary = require("../config/cloudinary.config");
+const Report = require("../models/report");
+const Project = require("../models/project");
 
-////////////////////// PROTECTED ROUTE //////////////////////////////
 
 module.exports.users = async (req, res) => {
     try {
@@ -16,7 +16,7 @@ module.exports.users = async (req, res) => {
 /////////////////////////// USER BY ID ///////////////////////////////
 
 module.exports.userById = async (req, res) => {
-    const  userId  = req.params.id;
+    const userId = req.params.id;
 
     try {
         const user = await User.findById(userId);
@@ -50,4 +50,102 @@ module.exports.updateProfile = async (req, res) => {
     console.log(req.file);
 
     // console.log(req.file);
+};
+
+module.exports.report = async (req, res) => {
+    try {
+        const { location, content, address } = req.body;
+        const parsedLocation = JSON.parse(location); // Convert location from string to object
+
+        let attachments = [];
+
+        // Loop through each file and upload to Cloudinary
+        for (const file of req.files) {
+            const result = await cloudinary.uploader.upload(file.path);
+            attachments.push({
+                name: file.fieldname,
+                media: result.secure_url,
+            });
+        }
+
+        // Create report in database
+        const newReport = new Report({
+            location: parsedLocation,
+            content,
+            address: address,
+            attachments: attachments,
+            reportedBy: req.user.userId,
+        });
+
+        await newReport.save();
+
+        res.status(201).json({ message: "Report submitted successfully!", report: newReport });
+    } catch (error) {
+        console.error("Error submitting report:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+module.exports.myReports = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const reports = await Report.find({ reportedBy: userId }).populate("reportedBy");
+        if (reports.length > 0) {
+            res.status(200).json({ message: "reports fetched success!", reports });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports.updateUserProfile = async (req, res) => {
+    const { username, email, phoneNumber, address } = req.body;
+
+    try {
+        // Find the user by ID (assuming the user ID is stored in req.user._id after authentication)
+        const user = await User.findById(req.user.userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+        }
+
+        const result = await cloudinary.uploader.upload(req.file.path);
+
+        // Update user fields
+        user.username = username || user.username;
+        user.email = email || user.email;
+        user.phoneNumber = phoneNumber || user.phoneNumber;
+        user.address = address || user.address;
+        user.avatar = result.secure_url || user.avatar;
+
+        // Save the updated user
+        const updatedUser = await user.save();
+        res.status(200).json({ message: "user updated successfully!", updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports.projectProgress = async (req, res) => {
+    try {
+        const projects = await Project.aggregate([
+            {
+                $project: {
+                    _id: 0,
+                    projectScope: 1,
+                    progress: 1,
+                },
+            },
+        ]);
+
+        res.status(200).json({
+            message: "Successfully fetched project progress.",
+            data: projects,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error fetching project progress",
+            error: error.message,
+        });
+    }
 };

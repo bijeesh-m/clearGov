@@ -1,11 +1,11 @@
 const User = require("../models/user");
+const Admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 ///////////////////////////// REGISTER ////////////////////////////////
 
 module.exports.register = async (req, res) => {
-    console.log(req.body);
     try {
         const isExist = await User.findOne({ email: req.body.email });
 
@@ -62,4 +62,33 @@ module.exports.getProfile = async (req, res) => {
 module.exports.logout = async (req, res) => {
     res.clearCookie("accessToken");
     res.status(200).json({ message: "Successfully logged out" });
+};
+
+module.exports.adminLogin = async (req, res) => {
+    console.log("form admin login");
+    const { email, password } = req.body;
+
+    try {
+        const admin = await Admin.findOne({ email: email });
+
+        console.log(admin);
+
+        if (admin) {
+            const auth = await bcrypt.compare(password, admin.password);
+            console.log(auth);
+
+            if (auth) {
+                const token = sign({ userId: admin._id, role: "Admin" }, process.env.SECRET_KEY, { expiresIn: "5hr" });
+                res.cookie("accessToken", token, { httpOnly: true, maxAge: 3600000 });
+                res.status(200).json({ message: "Login success!", admin });
+            } else {
+                res.status(400).json({ message: "Ivalid credentials!" });
+            }
+        } else {
+            res.status(404).json({ message: "User not found!" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
 };

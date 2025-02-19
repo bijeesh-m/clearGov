@@ -24,7 +24,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-white-100 ">
+        <div className="min-h-screen bg-gradient-to-br bg-white-100 from-slate-200 to-slate-500  ">
             <section className=" px-5 md:px-10 py-2">
                 <div className=" flex justify-between">
                     <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Tenders</h1>
@@ -36,10 +36,10 @@ const Home = () => {
                 </div>
                 <div className="flex flex-col ">
                     <div className=" ">
-                        <div className="border overflow-y-auto h-52 md:h-fit   rounded-md">
+                        <div className="border overflow-y-auto  md:h-fit   rounded-md">
                             <div className=" ">
-                                <table className=" relative table text-xs  h-full  text-[10px]    md:table-sm   ">
-                                    <tr className=" bg-blue-950 sticky top-0 text-[10px] md:text-sm text-white    ">
+                                <table className=" relative table text-xs  md:text-lg font-thin h-full  text-[10px]    md:table-sm   ">
+                                    <tr className=" bg-blue-950 sticky top-0 text-[10px] md:text-lg text-white    ">
                                         <th></th>
                                         <th className=" p-2">Tender Title </th>
                                         <th>Reference No </th>
@@ -74,7 +74,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            <div className="overflow-x-auto z-0 px-5 md:px-10 py-2 relative">
+            {/* <div className="overflow-x-auto z-0 px-5 md:px-10 py-2 relative">
                 <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Corrigendums</h1>
                 <table className="min-w-full   border border-gray-300 shadow-md rounded-md overflow-hidden">
                     <thead>
@@ -96,7 +96,7 @@ const Home = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div> */}
         </div>
     );
 };

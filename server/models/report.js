@@ -2,16 +2,30 @@ const mongoose = require("mongoose");
 
 const reportSchema = new mongoose.Schema(
     {
-        Content: {
+        location: {
+            lat: String,
+            lng: String,
+        },
+        address:{
+            type:String
+        },
+        content: {
             type: String,
         },
+        attachments: [
+            {
+                name: String,
+                media: String,
+            },
+        ],
+
         reportedBy: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
         },
         reportedAt: {
             type: Date,
-            required: true,
+            default: Date.now(),
         },
     },
     {

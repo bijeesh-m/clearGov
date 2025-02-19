@@ -9,9 +9,6 @@ const Dashboard = () => {
         <div className="flex">
             <Sidebar />
             <div className=" w-full  h-screen flex flex-col  overflow-y-auto">
-                <div className=" flex-1">
-                    <Header />
-                </div>
                 <div className=" overflow-y-auto h-full">
                     <Outlet />
                 </div>

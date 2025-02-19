@@ -12,7 +12,7 @@ const bidSchema = new mongoose.Schema(
     // Reference to the Contractor (or User) submitting the bid
     contractor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Contractor", // Assuming you have a Contractor model
+      ref: "User", // Assuming you have a Contractor model
       required: true,
     },
 

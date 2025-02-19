@@ -11,7 +11,7 @@ const UserDetails = ({ user }) => {
                         <a href="/admin/dashboard">Dashboard</a>
                     </li>
                     <li>
-                        <a href="/admin/dashboard/users">Users</a>
+                        <a href="/admin/dashboard">Users</a>
                     </li>
                     <li>User Profile</li>
                 </ul>

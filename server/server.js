@@ -9,8 +9,7 @@ const contractorRoute = require("./routes/contractor");
 const dbConnect = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const upload = require("./middleware/multer");
-const cloudinary = require("./config/cloudinary.config");
+
 
 const app = express();
 
@@ -30,3 +29,6 @@ app.use("/govauth", govauthRoute);
 app.listen(process.env.PORT, () => {
     console.log(`server is running on port ${process.env.PORT}`);
 });
+
+
+

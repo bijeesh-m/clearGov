@@ -2,6 +2,8 @@
 const Tender = require("../models/tender");
 const Bid = require("../models/bidModel");
 
+const cloudinary = require("../config/cloudinary.config");
+
 // View all tenders
 module.exports.viewAllTenders = async (req, res) => {
     try {
@@ -28,6 +30,8 @@ module.exports.viewTenderDetails = async (req, res) => {
 // Submit a bid for a tender
 module.exports.submitBid = async (req, res) => {
     console.log(req.body);
+    console.log(req.files);
+
     try {
         const { bidAmount, proposal, paymentMode, emdAmount, emdTransactionId, emdPaymentDate, bidValidityDays } =
             req.body;
@@ -39,6 +43,20 @@ module.exports.submitBid = async (req, res) => {
         //   return res.status(400).json({ success: false, message: 'Tender is no longer open for bidding' });
         // }
 
+        // Array to store the results of uploaded files
+
+        let covers = [];
+
+        // Loop through each file and upload to Cloudinary
+        for (const file of req.files) {
+            // const result = await cloudinary.uploader.upload(file.path);
+            const result = await cloudinary.uploader.upload(file.path);
+            covers.push({
+                coverName: file.fieldname,
+                document: result.secure_url,
+            });
+        }
+
         // Create a new bid
         const bid = new Bid({
             contractor: req.user.userId,
@@ -49,6 +67,7 @@ module.exports.submitBid = async (req, res) => {
             paymentMode,
             emdAmount,
             emdPaymentDetails: { paymentDate: emdPaymentDate, transactionId: emdTransactionId },
+            covers,
         });
         await bid.save();
         res.status(201).json({ success: true, message: "Bid submitted successfully", data: bid });

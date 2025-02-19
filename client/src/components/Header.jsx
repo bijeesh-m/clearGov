@@ -8,17 +8,16 @@ const Header = () => {
     // const [lastScrollTop, setLastScrollTop] = useState(0);
     const user = useSelector((state) => state.user);
 
-
     const handleSearchTenders = (e) => {
         e.preventDefault();
-        if (searchQuery!== "") {
+        if (searchQuery !== "") {
             window.location.replace(`/search-results/${searchQuery}`);
             setSearchQuery("");
         }
     };
 
     return (
-        <div className={` transition-transform  z-10 duration-700 ease-in sticky top-0  w-full `}>
+        <div className={` transition-transform bg-gradient-to-br from-blue-950 to-blue-600  z-10 duration-700 ease-in sticky top-0  w-full `}>
             <div className=" w-full ">
                 <header className=" p-4  bg-white border-b shadow-md">
                     <div className="container px-4 flex justify-between items-center">
@@ -61,6 +60,14 @@ const Header = () => {
                             <Link to="/tender-details" className=" hover:underline">
                                 Tenders
                             </Link>
+                            <Link to="/projects" className=" hover:underline">
+                                Projects
+                            </Link>
+
+                            <Link to="/reports" className=" hover:underline">
+                                Report
+                            </Link>
+
                             <Link to="/about" className=" hover:underline whitespace-nowrap">
                                 About Us
                             </Link>
@@ -73,20 +80,25 @@ const Header = () => {
                                     Login
                                 </Link>
                             )}
-                            <div className=" ">
-                                {user.username && (
+
+                            {user.username && (
+                                <div className=" w-10 h-10 rounded-full bg-red-200">
                                     <Link to={"/profile"}>
-                                        <div className=" w-10  ">
-                                            <img src="/assets/user-circle-svgrepo-com (1).svg" />
+                                        <div className=" w-full h-full object- overflow-hidden rounded-full">
+                                            <img
+                                                className=" w-full h-full object-cover"
+                                                src={user.avatar}
+                                                alt="profile"
+                                            />
                                         </div>
                                     </Link>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </nav>
                     </div>
 
                     <div className="drawer drawer-start">
-                        <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
+                        <input id="my-drawer-4" type="checkbox" className="drawer-toggle bg-red-500 " />
                         <div className="drawer-side ">
                             <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
                             <ul className="menu bg-gradient-to-tl from-[#000040] to-black text-lg  text-orange-500  space-y-5 min-h-full w-60 p-4 pl-10 ">
@@ -101,6 +113,13 @@ const Header = () => {
                                 <Link to="/tenders" className=" hover:underline hover:bg-orange-200 rounded-md p-2">
                                     Tenders
                                 </Link>
+                                <Link to="/reports" className=" hover:underline hover:bg-orange-200 rounded-md p-2">
+                                    Report
+                                </Link>
+                                <Link to="/projects" className=" hover:underline">
+                                    Projects
+                                </Link>
+
                                 <Link to="/about" className=" hover:underline hover:bg-orange-200 rounded-md p-2">
                                     About Us
                                 </Link>
@@ -115,8 +134,8 @@ const Header = () => {
                                 <div className="  flex-1 flex items-end pb-5 ">
                                     {user.username && (
                                         <Link className=" flex items-center  gap-2" to={"/profile"}>
-                                            <div className=" w-10  ">
-                                                <img src="/assets/user-circle-svgrepo-com (1).svg" />
+                                            <div className=" w-10  h-10 rounded-full overflow-hidden bg-red-50">
+                                                <img className=" h-full w-full object-cover" src={user.avatar} />
                                             </div>
                                             <p>{user.username}</p>
                                         </Link>

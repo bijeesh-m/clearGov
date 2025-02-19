@@ -17,8 +17,8 @@ module.exports.tenderById = async (req, res) => {
     console.log("sadkfjl");
     const tenderID = req.params.id;
     try {
-        // const tender = await Tender.findOne({ tenderID: tenderID });
-        const tender = await Tender.findById(tenderID);
+        const tender = await Tender.findOne({ tenderID: tenderID });
+        // const tender = await Tender.findById(tenderID);
         console.log(tender);
 
         res.status(200).json({ message: "success", tender });

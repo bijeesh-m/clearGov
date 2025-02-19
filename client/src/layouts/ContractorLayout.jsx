@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "../components/contractor/Header";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Footer from "../components/contractor/Footer";
+import { AuthContext } from "../context/authContext";
 
 const ContractorLayout = () => {
+    const { user } = useContext(AuthContext);
+
+    if (user && user.role !== "Contractor") {
+        return <Navigate to={"/login"} />;
+    }
     return (
         <div>
             <Header />

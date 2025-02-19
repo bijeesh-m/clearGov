@@ -5,7 +5,7 @@ const Sidebar = () => {
     return (
         <div>
             <div className="drawer lg:drawer-open z-[100]">
-                <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+                <input id="my-drawer-2" type="checkbox" className="drawer-toggle absolute" />
                 <div className="drawer-content flex">
                     {/* Page content here */}
                     <button className="relative group ">
@@ -23,7 +23,6 @@ const Sidebar = () => {
                 <div className="drawer-side border ">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <div className=" h-full flex flex-col bg-white z-50">
-                        <div className=" text-2xl font-black p-6 border-b border-black">Admin</div>
 
                         <div className=" flex-1 overflow-y-scroll sidebar">
                             <div className=" rounded">
@@ -31,7 +30,7 @@ const Sidebar = () => {
                                 <ul className="menu  text-base-content text-[16px]  w-80 p-4">
                                     {/* Sidebar content here */}
                                     <li>
-                                        <Link to="/admin/dashboard/users">Users</Link>
+                                        <Link to="/admin/dashboard">Users</Link>
                                     </li>
                                     <li>
                                         <a>Permissions</a>

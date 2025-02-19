@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
 
-const BidSubmit = ({ tenderId }) => {
-    const [covers, setCovers] = useState({});
-    const [numOfCovers, setNumOfCovers] = useState(0);
+const BidSubmit = ({ tenderId, covers }) => {
     const [formData, setFormData] = useState({
         bidAmount: "",
         proposal: "",
@@ -16,41 +14,23 @@ const BidSubmit = ({ tenderId }) => {
         // notes: "",
     });
 
-    // useEffect(() => {
-    //     const fetchTenders = async () => {
-    //         try {
-    //             const response = await axiosInstance.get(`/tender/tender/${tenderId}`);
-    //             console.log(response);
-    //             if (response.status === 200) {
-    //                 setNumOfCovers(response.data.numberOfCovers);
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchTenders();
-    // }, []);
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    const [files, setFiles] = useState({});
+
+    // Handle file input change
+    const handleFileChange = (fieldName) => (e) => {
+        console.log("file change");
+        setFiles({ ...files, [fieldName]: e.target.files[0] });
+    };
+
+    console.log(files);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-    };
-
-    const handleFileUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newCovers = files.map((file) => ({
-            coverName: file.name,
-            file, // Store the file object for upload
-        }));
-
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            covers: [...prevFormData.covers, ...newCovers], // Append instead of replace
-        }));
     };
 
     console.log(formData);
@@ -61,9 +41,26 @@ const BidSubmit = ({ tenderId }) => {
         setError("");
         setSuccess("");
 
+        const formDataToSend = new FormData();
+
+        // Append files to FormData
+        Object.keys(files).forEach((key) => {
+            formDataToSend.append(key, files[key]);
+        });
+
+        // Append other form data
+        Object.keys(formData).forEach((key) => {
+            formDataToSend.append(key, formData[key]);
+        });
+
+        
+
         try {
             axiosInstance
-                .post(`/contractor/tenders/${tenderId}/bid`, formData, { withCredentials: true })
+                .post(`/contractor/tenders/${tenderId}/bid`, formDataToSend, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    withCredentials: true,
+                })
                 .then((res) => {
                     console.log(res);
                     setSuccess("Bid submitted successfully!");
@@ -192,19 +189,18 @@ const BidSubmit = ({ tenderId }) => {
                 {/* Cover Documents */}
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Cover Documents</label>
-                    <input
-                        type="file"
-                        multiple
-                        onChange={handleFileUpload}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    />
-                    <div className="mt-2">
-                        {formData.covers.map((cover, index) => (
-                            <div key={index} className="text-sm text-gray-600">
-                                {cover.coverName}
+                    {covers.map((cover, i) => {
+                        return (
+                            <div key={i}>
+                                <p>{cover}</p>
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange(cover)}
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                />
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
 
                 {/* Notes */}

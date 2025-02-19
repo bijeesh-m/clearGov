@@ -8,6 +8,7 @@ import NotFound from "../pages/NotFound/NotFound";
 import Projects from "../pages/authority/Projects";
 import ProjectDetails from "../pages/authority/ProjectDetails";
 import TenderForm from "../pages/authority/TenderForm";
+import BidsPage from "../pages/authority/BidsPage";
 
 const AuthorityRoutes = () => {
     return (
@@ -19,6 +20,7 @@ const AuthorityRoutes = () => {
                     <Route path="/projects" element={<Projects />} />
                     <Route path="/project/:projectId" element={<ProjectDetails />} />
                     <Route path="/create-tender" element={<TenderForm />} />
+                    <Route path="/bids" element={<BidsPage />} />
                 </Route>
                 <Route path="/register" element={<GovernmentAuthorityForm />} />
                 <Route path="/*" element={<NotFound />} />

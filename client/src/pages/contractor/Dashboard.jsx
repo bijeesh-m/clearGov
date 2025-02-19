@@ -1,11 +1,12 @@
 import React from "react";
-
+import { useSelector } from "react-redux";
 const Dashboard = () => {
+    const user = useSelector((state) => state.user);
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             {/* Dashboard Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-800">Welcome Back, John Doe</h1>
+                <h1 className="text-3xl font-bold text-gray-800">Welcome Back, {user.username}</h1>
                 <p className="text-gray-600">Here's what's happening with your tenders and bids today.</p>
             </div>
 

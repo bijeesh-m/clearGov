@@ -1,114 +1,216 @@
+// UserProfile.js
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import axios from "../../config/axios.config";
+import { useDispatch, useSelector } from "react-redux";
+import axiosInstance from "../../config/axios.config";
+import toast from "react-hot-toast";
+import MyReports from "../../components/user/MyReports";
+import { addUser } from "../../features/user/userSlice";
 
 const UserProfile = () => {
     const user = useSelector((state) => state.user);
-    const [edit, setEdit] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({
+        username: user.username,
+        email: user.email,
+        phoneNumber: user.phoneNumber || "",
+        address: user.address || "",
+        avatar: user.avatar || "",
+    });
 
-    const [image, setImage] = useState("");
+    const [avatarPreview, setAvatarPreview] = useState(user.avatar);
 
-    const handleEditButton = () => {
-        setEdit(!edit);
+    const dispatch = useDispatch()
+
+    // Handle form input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
-    const handleFileChange = (e) => {
+    // Handle avatar file change
+    const handleAvatarChange = (e) => {
         const file = e.target.files[0];
-        setImage(file);
-        // const reader = new FileReader();
-        // reader.onloadend = () => {
-        //     setPreviewUrl(reader.result); // Set the image URL to the state
-        // };
-        // if (file) {
-        //     reader.readAsDataURL(file); // Read the file as a data URL
-        // }
-        axios.put("/user/update-profile-picture", image).then((res) => {
-            console.log(res);
+        if (file) {
+            setFormData({ ...formData, avatar: file });
+            setAvatarPreview(URL.createObjectURL(file));
+        }
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append("username", formData.username);
+        data.append("email", formData.email);
+        data.append("phoneNumber", formData.phoneNumber);
+        data.append("address", formData.address);
+        if (formData.avatar) {
+            data.append("avatar", formData.avatar);
+        }
+
+        try {
+            const response = await axiosInstance.put("/user/update", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            toast.success("Profile updated successfully!");
+            setIsEditing(false);
+            dispatch(addUser(response.data.updatedUser))
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("Failed to update profile.");
+        }
+    };
+
+    const handleLogout = () => {
+        axiosInstance
+            .delete("/auth/logout")
+            .then((res) => {
+                toast.error(res.data.message);
+                window.location.replace("/login");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const handleEdit = () => {
+        setIsEditing(!isEditing);
+        setAvatarPreview(user.avatar)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
         });
     };
 
     return (
-        <div className=" h-screen md:flex">
-            <div className=" w-fit flex flex-col flex-1 p-5 md:p-10 items-center gap-5">
-                <div
-                    onMouseEnter={handleEditButton}
-                    onMouseLeave={handleEditButton}
-                    className=" bg-white w-[100px] relative h-[100px] rounded-full p-0 overflow-hidden "
-                >
-                    <img
-                        className=" w-full h-full object-cover object-center"
-                        src={previewUrl ? previewUrl : user.avatar}
-                        alt="profile picture"
-                    />
-                    {edit && (
-                        <div className=" -z-0 absolute w-full h-full top-0  opacity-70 bg-gray-500 flex justify-center items-center ">
-                            <input
-                                type="file"
-                                // value={file}
-                                onChange={handleFileChange}
-                                className="absolute w-full h-full opacity-0"
-                            />
-                            <p className=" ">✏️</p>
+        <div className="min-h-screen px-4 my-2 sm:px-6 lg:px-8">
+            <div className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+                {/* Profile Header */}
+                <div className="bg-gradient-to-r from-rose-400 to-rose-500 p-6">
+                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                        {/* Profile Picture */}
+                        <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center">
+                            <img src={avatarPreview} alt="Profile" className=" h-full rounded-full object-cover" />
                         </div>
-                    )}
-                </div>
-                <div className=" flex items-center gap-3">
-                    <input
-                        disabled
-                        className=" text-xl font-bold border capitalize py-1 px-3 focus:outline-none "
-                        value={user.username}
-                    />
-                    <div className="tooltip " data-tip="Edit">
-                        <button className="">✏️</button>
+                        {/* Name and Role */}
+                        <div className="text-center sm:text-left">
+                            <h1 className="text-2xl font-bold text-white">{user.username}</h1>
+                            <p className="text-sm text-blue-200">{user.role}</p>
+                        </div>
+
+                        <div className="flex-1 justify-end gap-2 flex">
+                            <button
+                                onClick={handleEdit}
+                                className="px-6 py-2 border border-red-300 font-semibold rounded hover:bg-rose-400 shadow-lg text-white hover:text-black transition duration-300"
+                            >
+                                {isEditing ? "Cancel" : "Edit Profile"}
+                            </button>
+                            <button
+                                onClick={handleLogout}
+                                className="text-white font-semibold text-sm shadow-lg rounded px-2 py-1 border border-red-400"
+                            >
+                                Log Out
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div className=" flex items-center gap-3">
-                    <input
-                        disabled
-                        className=" text-xl font-bold border py-1 px-3 focus:outline-none "
-                        value={user.email}
-                    />
-                    <div className="tooltip " data-tip="Edit">
-                        <button className="">✏️</button>
+
+                {/* Profile Details */}
+                <div className="p-6">
+                    {/* Personal Information */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-4">Personal Information</h2>
+                        {isEditing ? (
+                            <form onSubmit={handleSubmit}>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm text-gray-600">Name</label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleInputChange}
+                                            className="w-full p-2 border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-600">Email</label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            className="w-full p-2 border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-600">Phone</label>
+                                        <input
+                                            type="text"
+                                            name="phoneNumber"
+                                            value={formData.phoneNumber}
+                                            onChange={handleInputChange}
+                                            className="w-full p-2 border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-600">Address</label>
+                                        <input
+                                            type="text"
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleInputChange}
+                                            className="w-full p-2 border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-600">Avatar</label>
+                                        <input
+                                            type="file"
+                                            name="avatar"
+                                            onChange={handleAvatarChange}
+                                            className="w-full p-2 border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <p className="text-sm text-gray-600">Name</p>
+                                    <p className="text-gray-800">{user.username}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">Email</p>
+                                    <p className="text-gray-800">{user.email}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">Phone</p>
+                                    <p className="text-gray-800">{user.phoneNumber ? user.phoneNumber : "NILL"}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">Address</p>
+                                    <p className="text-gray-800">{user.address ? user.address : "NILL"}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                </div>
-                <div className=" flex items-center gap-3">
-                    <input
-                        disabled
-                        className=" text-xl font-bold border py-1 px-3 focus:outline-none "
-                        value={user.phone}
-                    />
-                    <div className="tooltip " data-tip="Edit">
-                        <button className="">✏️</button>
+
+                    {/* Activity History */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-4">Activity History</h2>
+                        <MyReports />
                     </div>
-                </div>
-            </div>
-            <div className="  w-fit flex-1 flex flex-col ">
-                <div>
-                    <h1 className=" text-3xl font-bold p-5">Latest tenders</h1>
-                </div>
-                <div className="flex-1  p-5">
-                    <table className="md:table-md rounded-md overflow-hidden">
-                        <thead className=" bg-gray-300">
-                            <tr>
-                                <th>tenderID</th>
-                                <th>tenderValue</th>
-                                <th>tenderLocation</th>
-                            </tr>
-                        </thead>
-                        <tbody className=" bg-red-200">
-                            {[1, 2, 3, 4, 5].map((tender, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <td>124</td>
-                                        <td>500000</td>
-                                        <td>Malappuram</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+
+                  
                 </div>
             </div>
         </div>

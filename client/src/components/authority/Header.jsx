@@ -9,7 +9,7 @@ const Header = () => {
                 <nav className=" flex-1 w-full font-semibold ">
                     <ul className=" hidden  w-full sm:flex justify-evenly items-center h-full">
                         <li>
-                            <Link to={'/authority/create-tender'}>Create Tender</Link>
+                            <Link to={"/authority/create-tender"}>Create Tender</Link>
                         </li>
                         <li>
                             <Link to={"/authority/projects"}>Projects</Link>
@@ -17,7 +17,9 @@ const Header = () => {
                         <li>
                             <Link to={"/authority/create-project"}>Create project</Link>
                         </li>
-                        <li>Bidders</li>
+                        <li>
+                            <Link to={"/authority/bids"}>Bids</Link>
+                        </li>
                         <li>Account</li>
                     </ul>
                 </nav>

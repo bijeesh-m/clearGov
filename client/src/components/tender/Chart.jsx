@@ -18,6 +18,9 @@ import {
 } from "recharts";
 
 const Chart = ({ chartType, tenders }) => {
+
+
+    
     console.log(chartType, tenders);
 
     const COLORS = [
@@ -54,11 +57,12 @@ const Chart = ({ chartType, tenders }) => {
 
     return (
         <div className=" grid grid-cols-1 md:grid-cols-2 ">
+            
             <div style={{ width: "100%", height: 300 }}>
                 {chartType === "pie" && (
                     <ResponsiveContainer>
                         <PieChart>
-                            <Pie className=" outline-none" s dataKey="tenders" data={tenders} fill="#8884d8" label>
+                            <Pie className=" outline-none"  dataKey="tenders" data={tenders} fill="#8884d8" label>
                                 {tenders.map((t, i) => (
                                     <Cell key={i} style={{ color: "dark" }} fill={COLORS[i]} />
                                 ))}

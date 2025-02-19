@@ -64,6 +64,17 @@ const tenderSchema = new mongoose.Schema(
             bidOpeningDate: { type: Date },
             bidSubmissionEndDate: { type: Date },
         },
+        status: {
+            type: String,
+            enum: ["Not Started", "In Progress", "Completed", "Cancelled"],
+            default: "Not Started",
+        },
+        progress: {
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 100,
+        },
     },
     {
         timestamps: true,
