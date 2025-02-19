@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axiosInstance from "../../config/axios.config";
 const Dashboard = () => {
     const user = useSelector((state) => state.user);
+
+    const [submittedBids, setSubmittedBids] = useState(0);
+
+    useEffect(() => {
+        axiosInstance
+            .get("/contractor/bids")
+            .then((res) => {
+                const bidsCount = res.data.bids.length;
+                setSubmittedBids(bidsCount);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             {/* Dashboard Header */}
@@ -22,8 +38,8 @@ const Dashboard = () => {
                 {/* Submitted Bids Card */}
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-lg font-semibold text-gray-700">Submitted Bids</h3>
-                    <p className="text-2xl font-bold text-green-600">8</p>
-                    <p className="text-sm text-gray-500">You have submitted 8 bids so far.</p>
+                    <p className="text-2xl font-bold text-green-600">{submittedBids}</p>
+                    <p className="text-sm text-gray-500">You have submitted {submittedBids} bids so far.</p>
                 </div>
 
                 {/* Upcoming Deadlines Card */}
