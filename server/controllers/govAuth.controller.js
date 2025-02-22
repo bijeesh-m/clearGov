@@ -1,6 +1,7 @@
 const Project = require("../models/project");
 // const Expense = require('../models/Expense');
 const Bid = require("../models/bidModel");
+const Tender = require("../models/tender");
 
 // Project Initiators
 exports.createProject = async (req, res) => {
@@ -145,12 +146,43 @@ module.exports.bids = async (req, res) => {
     }
 };
 
+
+
 module.exports.approveBid = async (req, res) => {
     try {
-        const { status } = req.body;
-        const bid = await Bid.findByIdAndUpdate(req.params.bidId, { bidStatus: status,notes:"Your" }, { new: true });
-        res.status(200).json({message:"Bid approved success"});
+        const { tenderId, bidId } = req.params;
+
+        // Find the bid
+        const bid = await Bid.findById(bidId).populate("contractor");
+        if (!bid) {
+            return res.status(404).json({ message: "Bid not found" });
+        }
+
+        // Update the tender with the awarded bid and contractor
+        const updatedTender = await Tender.findByIdAndUpdate(
+            tenderId,
+            {
+                awardedBid: bid._id,
+                awardedContractor: bid.contractor._id,
+                status: "Completed",
+            },
+            { new: true }
+        ).populate("awardedBid awardedContractor");
+
+        if (!updatedTender) {
+            return res.status(404).json({ message: "Tender not found" });
+        }
+
+        // Update the bid status
+        await Bid.findByIdAndUpdate(bidId, { bidStatus: "Accepted" });
+
+        res.status(200).json({
+            message: "Tender awarded successfully",
+            tender: updatedTender,
+        });
     } catch (error) {
-        res.status(500).json({ message: "Error updating bid status", error: error.message });
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
+
+

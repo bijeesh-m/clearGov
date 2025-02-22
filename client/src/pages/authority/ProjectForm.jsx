@@ -61,11 +61,7 @@ const ProjectForm = () => {
                     ></textarea>
                 </div>
 
-                <div className="mb-4">
-                    <label htmlFor="createdBy" className="block text-sm font-medium text-gray-700 mb-2">
-                        Created By
-                    </label>
-                </div>
+               
 
                 <div className="mb-4">
                     <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">

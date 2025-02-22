@@ -5,11 +5,9 @@ import Footer from "../components/authority/Footer";
 
 const AuthorityLayout = () => {
     return (
-        <div className=" flex flex-col">
+        <div>
             <Header />
-            <div className=" w-full p-5  ">
-                <Outlet />
-            </div>
+            <Outlet />
             <Footer />
         </div>
     );

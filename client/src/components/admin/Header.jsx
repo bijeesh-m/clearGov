@@ -1,15 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../config/axios.config";
+import toast from "react-hot-toast";
 
 const Header = () => {
+    const user = useNavigate((state) => state.user);
+    const handleLogout = () => {
+        axiosInstance
+            .delete("/auth/logout")
+            .then((res) => {
+                toast.error(res.data.message);
+                window.location.replace("/login");
+                localStorage.clear();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <div className=" bg-gray-50 w-full h-fit">
-            <div className=" flex px-2 py-2  items-center justify-end">
-                {/* <div className="join">
-                    <input className="input input-bordered join-item py-1" placeholder="Search" />
-                    <button className="btn join-item">Search</button>
-                </div> */}
-
+            <div className=" flex px-2 py-2  items-center justify-between">
+                <h1 className=" font-bold text-2xl">Admin Dashboard</h1>
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className=" ">
                         <div className="avatar">
@@ -25,7 +37,7 @@ const Header = () => {
                         <li>
                             <a>Settings</a>
                         </li>
-                        <li>
+                        <li onClick={handleLogout}>
                             <a>Logout</a>
                         </li>
                     </ul>

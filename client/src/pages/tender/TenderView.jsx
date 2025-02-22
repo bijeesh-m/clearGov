@@ -7,16 +7,11 @@ const TenderView = () => {
     const { tenderId } = useParams();
 
     const [tender, setTender] = useState(null);
-    const [user, setUser] = useState({});
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-        const user = jwtDecode(token);
-        setUser(user);
         axios
             .get(`/tender/tender/${tenderId}`)
             .then((res) => {
-                console.log(user);
                 setTender(res.data.tender);
             })
             .catch((err) => {
@@ -103,7 +98,6 @@ const TenderView = () => {
                                 {tender?.paymentMode}
                             </p>
                         </div>
-                        
                     </div>
                 </div>
                 <div className="card bg-gray-50 p-4 rounded-lg leading-10">
@@ -117,7 +111,7 @@ const TenderView = () => {
                                 <p>{new Date(tender?.criticalDates?.bidOpeningDate).toLocaleDateString()}</p>
                             </p>
                             <p className=" flex gap-2 p-2 bg-gray-100 rounded-sm">
-                                <strong className=" text-blue-950">Bid submission date:</strong>
+                                <strong className=" text-blue-950">Bid submission end date:</strong>
                                 <p>{new Date(tender?.criticalDates?.bidSubmissionEndDate).toLocaleDateString()}</p>
                             </p>
                             <p className=" flex gap-2 p-2 bg-gray-100 rounded-sm">
@@ -128,11 +122,6 @@ const TenderView = () => {
                     </div>
                 </div>
             </div>
-            {user.role === "Contractor" && (
-                <div className="flex justify-end">
-                    <button className="btn ">Place a Bid</button>
-                </div>
-            )}
         </div>
     );
 };

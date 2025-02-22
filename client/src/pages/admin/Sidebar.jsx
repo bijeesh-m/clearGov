@@ -23,7 +23,6 @@ const Sidebar = () => {
                 <div className="drawer-side border ">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <div className=" h-full flex flex-col bg-white z-50">
-
                         <div className=" flex-1 overflow-y-scroll sidebar">
                             <div className=" rounded">
                                 <p className=" text-lg bg-gray-500 text-white font-thin  px-4 py-2">User Management </p>
@@ -31,9 +30,6 @@ const Sidebar = () => {
                                     {/* Sidebar content here */}
                                     <li>
                                         <Link to="/admin/dashboard">Users</Link>
-                                    </li>
-                                    <li>
-                                        <a>Permissions</a>
                                     </li>
                                 </ul>
                             </div>
@@ -45,33 +41,6 @@ const Sidebar = () => {
                                     {/* Sidebar content here */}
                                     <li>
                                         <Link to="/admin/dashboard/tenders">Tenders</Link>
-                                    </li>
-                                    <li>
-                                        <a>Sidebar Item 2</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <p className=" text-lg bg-gray-500 text-white font-thin  px-4 py-2">User Management </p>
-                                <ul className="menu  text-base-content text-[16px]  w-80 p-4">
-                                    {/* Sidebar content here */}
-                                    <li>
-                                        <a>Sidebar Item 1</a>
-                                    </li>
-                                    <li>
-                                        <a>Sidebar Item 2</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <p className=" text-lg bg-gray-500 text-white font-thin  px-4 py-2">User Management </p>
-                                <ul className="menu  text-base-content text-[16px]  w-80 p-4">
-                                    {/* Sidebar content here */}
-                                    <li>
-                                        <a>Sidebar Item 1</a>
-                                    </li>
-                                    <li>
-                                        <a>Sidebar Item 2</a>
                                     </li>
                                 </ul>
                             </div>

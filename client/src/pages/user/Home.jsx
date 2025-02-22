@@ -30,6 +30,11 @@ const Home = () => {
                     <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Tenders</h1>
                     <div className=" ">
                         <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
+                            <Link to={'/authority/register'}>Register as a Government Authority</Link>
+                        </button>
+                    </div>
+                    <div className=" ">
+                        <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
                             <Link to={'/contractor/contractor-register'}>Online Bidder Enrollment</Link>
                         </button>
                     </div>

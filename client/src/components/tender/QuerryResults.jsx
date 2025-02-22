@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const QuerryResults = ({ tenders, searchQuerry }) => {
+
+    const navigate = useNavigate()
 
     const filteredTenders = useMemo(() => {
         return tenders.filter((tender) => {
@@ -18,20 +21,27 @@ const QuerryResults = ({ tenders, searchQuerry }) => {
             <div className="space-y-4">
                 {filteredTenders.length ? (
                     filteredTenders?.map((tender) => (
-                        <div key={tender._id} className="bg-white p-4 rounded-lg shadow-md">
+                        <div onClick={()=>navigate(`/tender/${tender.tenderID}`)} key={tender._id} className="bg-white p-4 cursor-pointer rounded-lg shadow-md">
                             <h2 className="text-xl font-semibold text-gray-800">{tender?.workItemDetails.title}</h2>
                             <p className="text-gray-600">
                                 <span className="font-semibold">Reference Number:</span> {tender?.tenderReferenceNumber}
                             </p>
                             <p className="text-gray-600">
-                                <span className="font-semibold">Category:</span> {tender?.category}
+                                <span className="font-semibold">Category:</span> {tender?.tenderCategory}
                             </p>
                             <p className="text-gray-600">
-                                <span className="font-semibold">Closing Date:</span> {tender?.closingDate}
+                                <span className="font-semibold">Closing Date:</span>{" "}
+                                {new Date(tender?.criticalDates?.bidSubmissionEndDate).toLocaleDateString()}
                             </p>
                             <p
                                 className={`font-semibold ${
-                                    tender.status === "Open" ? "text-green-500" : "text-red-500"
+                                    tender.status === "Cancelled"
+                                        ? "text-red-500"
+                                        : tender.status === "In Progress"
+                                        ? "text-blue-400"
+                                        : tender.status === "Not Started"
+                                        ? "text-gray-400"
+                                        : "text-green-500"
                                 }`}
                             >
                                 {tender.status}

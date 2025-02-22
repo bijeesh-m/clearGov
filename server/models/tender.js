@@ -10,7 +10,7 @@ const tenderSchema = new mongoose.Schema(
         },
         tenderReferenceNumber: {
             type: String,
-            default: "",
+            default: "REF" + Date.now(),
             unique: true,
         },
         tenderID: {
@@ -75,6 +75,8 @@ const tenderSchema = new mongoose.Schema(
             min: 0,
             max: 100,
         },
+        awardedBid: { type: mongoose.Schema.Types.ObjectId, ref: "Bid" }, // Stores the winning bid
+        awardedContractor: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Stores the contractor who won
     },
     {
         timestamps: true,

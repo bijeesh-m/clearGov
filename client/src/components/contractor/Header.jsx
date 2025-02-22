@@ -23,13 +23,20 @@ const Header = () => {
                     <a href="/contractor/bids" className="text-gray-700 hover:text-blue-600">
                         My Bids
                     </a>
+                    <a href="/contractor/expense-report-form" className="text-gray-700 hover:text-blue-600">
+                        Add Expense
+                    </a>
+                    <a href="/contractor/view-expense" className="text-gray-700 hover:text-blue-600">
+                        View Expense Reports
+                    </a>
+
                     <a href="/contractor/profile" className="text-gray-700 hover:text-blue-600">
                         Profile
                     </a>
                 </nav>
 
                 <div className=" w-11 h-11 rounded-full overflow-hidden">
-                  <img className=" w-full h-full" src={user.avatar} alt="" />
+                  <img className=" w-full h-full" src={user?.avatar} alt="" />
                 </div>
                 
             </div>

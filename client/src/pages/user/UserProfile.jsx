@@ -69,6 +69,7 @@ const UserProfile = () => {
             .then((res) => {
                 toast.error(res.data.message);
                 window.location.replace("/login");
+                localStorage.clear()
             })
             .catch((err) => {
                 console.log(err);

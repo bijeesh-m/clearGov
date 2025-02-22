@@ -2,20 +2,10 @@ import { useState } from "react";
 import { tenderFormSchema } from "../../utils/yupSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axiosInstance from "../../config/axios.config";
+import toast from "react-hot-toast";
 
 const CreateTender = ({ projectID }) => {
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors },
-    // } = useForm({
-    //     resolver: yupResolver(tenderFormSchema),
-    // });
-
-    // const handleclick = () => {
-    //     console.log("hello");
-    // };
-
     const [covers, setCovers] = useState([""]);
 
     const addCover = () => {
@@ -38,57 +28,18 @@ const CreateTender = ({ projectID }) => {
 
     const onSubmit = (data) => {
         console.log(data);
-        // Add your form submission logic here
+        axiosInstance
+            .post("/tender/tender", data)
+            .then((res) => {
+                console.log(res);
+                toast.success("Tender created!");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
- 
-    // const handleNestedChange = (e, category) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [category]: { ...formData[category], [name]: value },
-    //     });
-    // };
-
-    // const handleCoverChange = (index, e) => {
-    //     const updatedCovers = [...formData.covers];
-    //     updatedCovers[index] = e.target.value;
-    //     setFormData({ ...formData, covers: updatedCovers });
-    // };
-
-    // const addCoverField = () => {
-    //     setFormData({
-    //         ...formData,
-    //         covers: [...formData.covers, ""],
-    //     });
-    // };
-
-    // const removeCoverField = (index) => {
-    //     const updatedCovers = formData.covers.filter((_, i) => i !== index);
-    //     setFormData({ ...formData, covers: updatedCovers });
-    // };
-
-    // const handleTenderSubmit = async (e, data) => {
-    //     console.log("sjflaksjf");
-
-    //     e.preventDefault();
-    //     console.log("askdjfl");
-
-    //     try {
-    //         console.log(formData);
-
-    //         // const response = await axios.post("/api/tenders", {
-    //         //     projectID,
-    //         //     ...formData,
-    //         // });
-    //         // console.log("Tender created:", response.data);
-    //     } catch (error) {
-    //         console.error("Error creating tender:", error);
-    //     }
-    // };
-
     return (
-        
         <div className="mx-auto p-6 sm:p-10 md:p-20 bg-white shadow-lg ">
             <h1 className="text-2xl font-bold mb-4">Tender Submission Form</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -103,24 +54,40 @@ const CreateTender = ({ projectID }) => {
                         <span className="text-red-500 text-sm">{errors.organisationChain.message}</span>
                     )}
                 </div>
+                {/* Project */}
+                <div>
+                    <label className="block text-sm font-medium">Project Id</label>
+                    <input {...register("project")} className="mt-1 block w-full p-2 border border-gray-300 rounded" />
+                    {errors.project && <span className="text-red-500 text-sm">{errors.project.message}</span>}
+                </div>
 
                 {/* Tender Type */}
                 <div>
                     <label className="block text-sm font-medium">Tender Type</label>
-                    <input
+                    <select
                         {...register("tenderType")}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    />
+                    >
+                        <option value="">Select Tender Type</option>
+                        <option value="Open">Open</option>
+                        <option value="Limited">Limited</option>
+                    </select>
                     {errors.tenderType && <span className="text-red-500 text-sm">{errors.tenderType.message}</span>}
                 </div>
 
                 {/* Tender Category */}
                 <div>
                     <label className="block text-sm font-medium">Tender Category</label>
-                    <input
+                    <select
                         {...register("tenderCategory")}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    />
+                    >
+                        <option value="">Select Category</option>
+                        <option value="Works">Works</option>
+                        <option value="Goods">Goods</option>
+                        <option value="Services">Services</option>
+                        <option value="Consultancy">Consultancy</option>
+                    </select>
                     {errors.tenderCategory && (
                         <span className="text-red-500 text-sm">{errors.tenderCategory.message}</span>
                     )}
@@ -138,25 +105,32 @@ const CreateTender = ({ projectID }) => {
                     )}
                 </div>
 
-                
-
                 {/* Payment Mode */}
                 <div>
                     <label className="block text-sm font-medium">Payment Mode</label>
-                    <input
+                    <select
                         {...register("paymentMode")}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    />
+                    >
+                        <option value="">Select Payment Mode</option>
+                        <option value="Online">Online</option>
+                        <option value="Offline">Offline</option>
+                    </select>
                     {errors.paymentMode && <span className="text-red-500 text-sm">{errors.paymentMode.message}</span>}
                 </div>
 
                 {/* Form of Contract */}
                 <div>
-                    <label className="block text-sm font-medium">Form Of Contract</label>
-                    <input
+                    <label className="block text-sm font-medium">Form of Contract</label>
+                    <select
                         {...register("formOfContract")}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    />
+                    >
+                        <option value="">Select Form</option>
+                        <option value="Item Rate">Item Rate</option>
+                        <option value="Lump Sum">Lump Sum</option>
+                        <option value="Percentage">Percentage</option>
+                    </select>
                     {errors.formOfContract && (
                         <span className="text-red-500 text-sm">{errors.formOfContract.message}</span>
                     )}
@@ -203,6 +177,18 @@ const CreateTender = ({ projectID }) => {
                         Add Cover
                     </button>
                 </fieldset>
+                <div>
+                    <label className="block text-sm font-medium">Number of Covers</label>
+                    <input
+                        type="number"
+                        {...register("numberOfCovers")}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                        min="1"
+                    />
+                    {errors.numberOfCovers && (
+                        <span className="text-red-500 text-sm">{errors.numberOfCovers.message}</span>
+                    )}
+                </div>
                 <div>
                     <label className="block text-sm font-medium">Tender Fee</label>
                     <input

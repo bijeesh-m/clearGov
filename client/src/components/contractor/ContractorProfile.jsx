@@ -1,6 +1,21 @@
 import React from "react";
+import axiosInstance from "../../config/axios.config";
+import toast from "react-hot-toast";
 
 const ContractorProfile = ({ contractor }) => {
+    const handleLogout = () => {
+        axiosInstance
+            .delete("/auth/logout")
+            .then((res) => {
+                toast.error(res.data.message);
+                window.location.replace("/login");
+                localStorage.clear();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     if (!contractor) {
         return <div className="text-center text-gray-600">Loading profile...</div>;
     }
@@ -9,7 +24,7 @@ const ContractorProfile = ({ contractor }) => {
         <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
                 {/* Profile Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6">
+                <div className="bg-gradient-to-r flex justify-between items-center from-blue-600 to-blue-800 p-6">
                     <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
                         {/* Profile Picture */}
                         <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center">
@@ -24,6 +39,11 @@ const ContractorProfile = ({ contractor }) => {
                             <h1 className="text-2xl font-bold text-white">{contractor.username}</h1>
                             <p className="text-sm text-blue-200">{contractor.role || "Contractor"}</p>
                         </div>
+                    </div>
+                    <div className=" bg-red-50 rounded-full px-3 py-1 shadow-md shadow-red-300">
+                        <button className=" font-bold text-red-600 " onClick={handleLogout}>
+                            Log Out
+                        </button>
                     </div>
                 </div>
 

@@ -52,10 +52,6 @@ const UserDetails = ({ user }) => {
                                         )}
                                     </span>
                                 </li>
-                                <li class="flex items-center py-3">
-                                    <span>Member since</span>
-                                    <span class="ml-auto">Nov 07, 2016</span>
-                                </li>
                             </ul>
                         </div>
                         <div class="my-4"></div>
@@ -84,30 +80,6 @@ const UserDetails = ({ user }) => {
                             <div class="text-gray-700">
                                 <div class="grid md:grid-cols-2 text-sm">
                                     <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">First Name</div>
-                                        <div class="px-4 py-2">{user.username}</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Last Name</div>
-                                        <div class="px-4 py-2">NILL</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Gender</div>
-                                        <div class="px-4 py-2">Female</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Contact No.</div>
-                                        <div class="px-4 py-2">+11 998001001</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Current Address</div>
-                                        <div class="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Permanant Address</div>
-                                        <div class="px-4 py-2">Arlington Heights, IL, Illinois</div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
                                         <div class="px-4 py-2 font-semibold">Email.</div>
                                         <div class="px-4 py-2">
                                             <a class="text-blue-800" href="mailto:jane@example.com">
@@ -121,9 +93,6 @@ const UserDetails = ({ user }) => {
                                     </div>
                                 </div>
                             </div>
-                            <button class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
-                                Show Full Information
-                            </button>
                         </div>
 
                         <div class="my-4"></div>
@@ -148,26 +117,8 @@ const UserDetails = ({ user }) => {
                                                 />
                                             </svg>
                                         </span>
-                                        <span class="tracking-wide">Experience</span>
                                     </div>
-                                    <ul class="list-inside space-y-2">
-                                        <li>
-                                            <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                            <div class="text-gray-500 text-xs">March 2020 - Now</div>
-                                        </li>
-                                        <li>
-                                            <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                            <div class="text-gray-500 text-xs">March 2020 - Now</div>
-                                        </li>
-                                        <li>
-                                            <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                            <div class="text-gray-500 text-xs">March 2020 - Now</div>
-                                        </li>
-                                        <li>
-                                            <div class="text-teal-600">Owner at Her Company Inc.</div>
-                                            <div class="text-gray-500 text-xs">March 2020 - Now</div>
-                                        </li>
-                                    </ul>
+                                    
                                 </div>
                                 <div>
                                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">

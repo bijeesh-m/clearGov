@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
+import toast from "react-hot-toast";
 
 const BidSubmit = ({ tenderId, covers }) => {
     const [formData, setFormData] = useState({
@@ -53,8 +54,6 @@ const BidSubmit = ({ tenderId, covers }) => {
             formDataToSend.append(key, formData[key]);
         });
 
-        
-
         try {
             axiosInstance
                 .post(`/contractor/tenders/${tenderId}/bid`, formDataToSend, {
@@ -78,6 +77,7 @@ const BidSubmit = ({ tenderId, covers }) => {
                 })
                 .catch((err) => {
                     console.log(err);
+                    toast.error(err.response.data.message);
                     setError("Failed to submit bid. Please try again.");
                 });
         } catch (err) {

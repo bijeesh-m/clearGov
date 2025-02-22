@@ -1,4 +1,3 @@
-// routes/contractorRoutes.js
 const express = require("express");
 const router = express.Router();
 const contractorController = require("../controllers/contractor.controller");
@@ -22,5 +21,9 @@ router.get("/bids/:id", verifyToken, contractorController.viewBidDetails);
 
 // Withdraw a bid
 router.delete("/bids/:id", contractorController.withdrawBid);
+
+router.post("/expense", verifyToken, upload.single("file"), contractorController.expense);
+router.get("/my-expenses", verifyToken, contractorController.myExpenses);
+router.get("/won-tenders", verifyToken, contractorController.TendersWon);
 
 module.exports = router;

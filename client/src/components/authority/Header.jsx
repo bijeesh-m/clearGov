@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <div>
+        <div className=" mb-5">
             <header className=" p-5 flex w-full justify-between bg-slate-100">
-                <div className=" text-xl sm:text-2xl md:text-3xl font-bold ">Authority Dashboard</div>
+                <div className=" text-xl sm:text-2xl md:text-3xl font-bold ">
+                    <Link to={"/authority"}>Authority Dashboard</Link>
+                </div>
                 <nav className=" flex-1 w-full font-semibold ">
                     <ul className=" hidden  w-full sm:flex justify-evenly items-center h-full">
                         <li>
@@ -20,7 +22,9 @@ const Header = () => {
                         <li>
                             <Link to={"/authority/bids"}>Bids</Link>
                         </li>
-                        <li>Account</li>
+                        <li>
+                            <Link to={"/authority/profile"}>Account</Link>
+                        </li>
                     </ul>
                 </nav>
             </header>

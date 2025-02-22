@@ -101,8 +101,8 @@ export const contractorRegisterSchema = yup.object().shape({
 
 export const tenderFormSchema = yup.object({
     organisationChain: yup.string().required("Organisation Chain is required."),
-
     tenderType: yup.string().required("Tender Type is required."),
+    project: yup.string().required("Project ID is required."),
 
     tenderCategory: yup.string().required("Tender Category is required."),
 
@@ -113,6 +113,7 @@ export const tenderFormSchema = yup.object({
     formOfContract: yup.string().required("Form Of Contract is required."),
 
     covers: yup.array().of(yup.string().required("Cover is required.")).min(1, "At least one cover is required."),
+    numberOfCovers: yup.string().required("NomberOfCovers is required."),
     tenderFee: yup.number().required("Tender Fee is required.").positive("Tender Fee must be positive."),
 
     workItemDetails: yup.object().shape({

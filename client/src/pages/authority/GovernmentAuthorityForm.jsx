@@ -34,7 +34,7 @@ const GovernmentAuthorityForm = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto p-5 m-10 bg-white rounded-lg sm:shadow-md">
+        <div className=" px-10 mx-auto p-5 m-10 bg-white rounded-lg ">
             <h2 className="text-2xl font-semibold text-center mb-4">Government Authority Registration</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
                 <div>

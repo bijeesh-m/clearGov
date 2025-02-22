@@ -7,6 +7,7 @@ import AuthorityRoutes from "./routes/AuthorityRoutes";
 import ContractorRoutes from "./routes/ContractorRoutes";
 import ScrollToTop from "./components/ScollToTop";
 import About from "./pages/about/About";
+import ContactPage from "./pages/Contact/ContactPage";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/authority/*" element={<AuthorityRoutes />} />
                 <Route path="/contractor/*" element={<ContractorRoutes />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<ContactPage />} />
             </Routes>
         </div>
     );

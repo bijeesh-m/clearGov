@@ -5,7 +5,6 @@ import Dashboard from "../pages/contractor/Dashboard";
 import SpendAnalysis from "../components/contractor/SpendAnalysis";
 import ProjectImplementation from "../components/contractor/ProjectImplementation";
 import TenderSubmission from "../components/contractor/TenderSubmission";
-import ExpenseReport from "../components/contractor/ExpenseReport";
 import NotFound from "../pages/NotFound/NotFound";
 import Tenders from "../pages/tender/Tenders";
 import ContractorLayout from "../layouts/ContractorLayout";
@@ -14,6 +13,8 @@ import TenderView from "../pages/tender/TenderView";
 import MyBidsPage from "../pages/contractor/MyBidsPage";
 import BidView from "../pages/contractor/BidView";
 import Profile from "../pages/contractor/Profile";
+import ExpenseReport from "../pages/contractor/ExpenseReport";
+import ViewExpenses from "../pages/contractor/ViewExpenses";
 
 const ContractorRoutes = () => {
     return (
@@ -30,8 +31,10 @@ const ContractorRoutes = () => {
                     <Route path="/spend-analysis" element={<SpendAnalysis />} />
                     <Route path="/bid-submission/:tenderId" element={<BidSubmission />} />
                     <Route path="/project-implementation" element={<ProjectImplementation />} />
-                    <Route path="/report" element={<ExpenseReport />} />
+                    {/* <Route path="/report" element={<ExpenseReport />} /> */}
                     <Route path="/latest-tenders" element={<Tenders />} />
+                    <Route path="/expense-report-form" element={<ExpenseReport />} />
+                    <Route path="/view-expense" element={<ViewExpenses />} />
                 </Route>
                 <Route path="/*" element={<NotFound />} />
             </Routes>

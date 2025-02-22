@@ -1,6 +1,7 @@
 // controllers/contractorController.js
 const Tender = require("../models/tender");
 const Bid = require("../models/bidModel");
+const Expense = require("../models/expense");
 
 const cloudinary = require("../config/cloudinary.config");
 
@@ -29,50 +30,44 @@ module.exports.viewTenderDetails = async (req, res) => {
 
 // Submit a bid for a tender
 module.exports.submitBid = async (req, res) => {
-    console.log(req.body);
-    console.log(req.files);
-
     try {
         const { bidAmount, proposal, paymentMode, emdAmount, emdTransactionId, emdPaymentDate, bidValidityDays } =
             req.body;
+
         const tenderId = req.params.id;
 
-        // Check if the tender is still open
-        // const tender = await Tender.findById(tenderId);
-        // if (tender.status !== 'Open') {
-        //   return res.status(400).json({ success: false, message: 'Tender is no longer open for bidding' });
-        // }
+        const isBidded = await Bid.findOne({ tender: tenderId, contractor: req.user.userId });
 
-        // Array to store the results of uploaded files
+        console.log(isBidded);
 
-        let covers = [];
+        if (!isBidded) {
+            let covers = [];
+            for (const file of req.files) {
+                const result = await cloudinary.uploader.upload(file.path);
+                covers.push({
+                    coverName: file.fieldname,
+                    document: result.secure_url,
+                });
+            }
 
-        // Loop through each file and upload to Cloudinary
-        for (const file of req.files) {
-            // const result = await cloudinary.uploader.upload(file.path);
-            const result = await cloudinary.uploader.upload(file.path);
-            covers.push({
-                coverName: file.fieldname,
-                document: result.secure_url,
+            // Create a new bid
+            const bid = new Bid({
+                contractor: req.user.userId,
+                tender: tenderId,
+                bidAmount: bidAmount,
+                bidValidityDays,
+                proposal,
+                paymentMode,
+                emdAmount,
+                emdPaymentDetails: { paymentDate: emdPaymentDate, transactionId: emdTransactionId },
+                covers,
             });
+            await bid.save();
+            res.status(201).json({ success: true, message: "Bid submitted successfully", data: bid });
+        } else {
+            res.status(409).json({ success: false, message: "Bid already submitted to this tender!" });
         }
-
-        // Create a new bid
-        const bid = new Bid({
-            contractor: req.user.userId,
-            tender: tenderId,
-            bidAmount: bidAmount,
-            bidValidityDays,
-            proposal,
-            paymentMode,
-            emdAmount,
-            emdPaymentDetails: { paymentDate: emdPaymentDate, transactionId: emdTransactionId },
-            covers,
-        });
-        await bid.save();
-        res.status(201).json({ success: true, message: "Bid submitted successfully", data: bid });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ success: false, message: "Error submitting bid", error: error.message });
     }
 };
@@ -119,5 +114,57 @@ module.exports.withdrawBid = async (req, res) => {
         res.status(200).json({ success: true, message: "Bid withdrawn successfully" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error withdrawing bid", error: error.message });
+    }
+};
+
+module.exports.expense = async (req, res) => {
+    try {
+        const { date, description, amount } = req.body;
+
+        const result = await cloudinary.uploader.upload(req.file.path);
+
+        const newExpense = new Expense({
+            date,
+            contractor: req.user.userId,
+            description,
+            amount,
+            file: result.secure_url,
+        });
+        await newExpense.save();
+        res.status(201).json({ message: "success", newExpense });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports.myExpenses = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const expenses = await Expense.find({ contractor: userId });
+
+        if (expenses.length) {
+            return res.status(200).json({ message: "success", expenses });
+        } else {
+            return res.status(400).json({ message: "Expense not found" });
+        }
+    } catch (error) {}
+};
+
+
+module.exports.TendersWon = async (req, res) => {
+
+    console.log("hi from won tenders");
+    try {
+        
+
+        // Find all tenders where this contractor has been awarded
+        const wonTenders = await Tender.find({ awardedContractor: req.user.userId })
+            .populate("awardedBid awardedContractor")
+            .exec();
+
+        res.status(200).json({ tenders: wonTenders });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };

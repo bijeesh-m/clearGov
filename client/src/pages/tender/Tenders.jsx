@@ -4,13 +4,12 @@
 
 import { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
-
-
+import { useSelector } from "react-redux";
 
 const Tenders = () => {
-    // Example tender data (replace with dynamic data from your backend)
-
     const [tenders, setTenders] = useState([]);
+
+    const user = useSelector((state) => state.user);
 
     useEffect(() => {
         axiosInstance
@@ -92,12 +91,21 @@ const Tenders = () => {
                                     >
                                         Apply Now
                                     </a>
-                                    <a
-                                        href={`/admin/dashboard/tender/${tender.tenderID}`}
-                                        className="text-gray-600 hover:text-gray-900"
-                                    >
-                                        View Details
-                                    </a>
+                                    {user?.role === "Admin" ? (
+                                        <a
+                                            href={`/admin/dashboard/tender/${tender.tenderID}`}
+                                            className="text-gray-600 hover:text-gray-900"
+                                        >
+                                            View Details
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={`/contractor/tenders/${tender.tenderID}`}
+                                            className="text-gray-600 hover:text-gray-900"
+                                        >
+                                            View Details
+                                        </a>
+                                    )}
                                 </td>
                             </tr>
                         ))}

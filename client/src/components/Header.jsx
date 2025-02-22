@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
-    const [isFixed, setIsFixed] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    // const [lastScrollTop, setLastScrollTop] = useState(0);
     const user = useSelector((state) => state.user);
 
     const handleSearchTenders = (e) => {
@@ -17,7 +15,9 @@ const Header = () => {
     };
 
     return (
-        <div className={` transition-transform bg-gradient-to-br from-blue-950 to-blue-600  z-10 duration-700 ease-in sticky top-0  w-full `}>
+        <div
+            className={` transition-transform bg-gradient-to-br from-blue-950 to-blue-600  z-10 duration-700 ease-in sticky top-0  w-full `}
+        >
             <div className=" w-full ">
                 <header className=" p-4  bg-white border-b shadow-md">
                     <div className="container px-4 flex justify-between items-center">
@@ -75,13 +75,13 @@ const Header = () => {
                                 Contact
                             </Link>
 
-                            {!user.username && (
+                            {user.role !== "Citizen" && (
                                 <Link className="hover:underline" to={"/login"}>
                                     Login
                                 </Link>
                             )}
 
-                            {user.username && (
+                            {user.role === "Citizen" && (
                                 <div className=" w-10 h-10 rounded-full bg-red-200">
                                     <Link to={"/profile"}>
                                         <div className=" w-full h-full object- overflow-hidden rounded-full">
@@ -132,7 +132,7 @@ const Header = () => {
                                     </Link>
                                 )}
                                 <div className="  flex-1 flex items-end pb-5 ">
-                                    {user.username && (
+                                    {user.role === "Citizen" && (
                                         <Link className=" flex items-center  gap-2" to={"/profile"}>
                                             <div className=" w-10  h-10 rounded-full overflow-hidden bg-red-50">
                                                 <img className=" h-full w-full object-cover" src={user.avatar} />
