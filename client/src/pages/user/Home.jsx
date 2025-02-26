@@ -24,7 +24,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br bg-white-100 from-slate-200 to-slate-500  ">
+        <div className="min-h-screen bg-gradient-to-br bg-slate-100 from-slate-50 to-slate-100  ">
             <section className=" px-5 md:px-10 py-2">
                 <div className=" flex justify-between">
                     <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Tenders</h1>
