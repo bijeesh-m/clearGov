@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "../../config/axios.config";
-import BarChart from "../../components/project/BarChart";
 import ProjectProgressChart from "../../components/user/ProjectProgressChart";
 
 const Projects = () => {
@@ -13,13 +12,19 @@ const Projects = () => {
     const [showBar, setShowBar] = useState(false);
     const [projectProgress, setProjectProgress] = useState([]);
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         const fetchProjects = async () => {
             try {
                 const response = await axios.get("/govauth/projects");
                 setProjects(response.data.projects);
             } catch (error) {
-                toast.error("Error fetching projects");
+                const toastId = toast.error("Error fetching projects");
+                if (error.status === 401) {
+                    toast.error("Session expired!", { id: toastId });
+                    navigate("/login");
+                }
                 console.error(error);
             } finally {
                 setIsLoading(false);
@@ -32,7 +37,6 @@ const Projects = () => {
         axios
             .get("/user/project-progress")
             .then((res) => {
-                console.log(res);
                 setProjectProgress(res.data.data);
             })
             .catch((err) => {
@@ -99,7 +103,6 @@ const Projects = () => {
                                 <option value="Not Started">Not Started</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Completed">Completed</option>
-                                <option value="On Hold">On Hold</option>
                             </select>
                         </div>
                     </div>

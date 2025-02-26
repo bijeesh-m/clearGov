@@ -23,7 +23,7 @@ const Header = () => {
                     <div className="container px-4 flex justify-between items-center">
                         <div className=" md:hidden bg-red-3f00 rounded">
                             <label htmlFor="my-drawer-4" className="drawer-button ">
-                                <img width={30} src="/assets/hamburger.svg" alt="menu" />
+                                <img width={40} className=" bg-orange-600 rounded-sm" src="/assets/hamburger.svg" alt="menu" />
                             </label>
                         </div>
                         <div>
@@ -75,7 +75,7 @@ const Header = () => {
                                 Contact
                             </Link>
 
-                            {user.role !== "Citizen" && (
+                            {user && user.role !== "Citizen" && (
                                 <Link className="hover:underline" to={"/login"}>
                                     Login
                                 </Link>
@@ -98,13 +98,13 @@ const Header = () => {
                     </div>
 
                     <div className="drawer drawer-start">
-                        <input id="my-drawer-4" type="checkbox" className="drawer-toggle bg-red-500 " />
+                        <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
                         <div className="drawer-side ">
                             <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
                             <ul className="menu bg-gradient-to-tl from-[#000040] to-black text-lg  text-orange-500  space-y-5 min-h-full w-60 p-4 pl-10 ">
                                 <li className=" items-end">
                                     <label htmlFor="my-drawer-4" className="drawer-button ">
-                                        <img width={30} src="/assets/close.svg" alt="close" />
+                                        <img width={30 }  src="/assets/close.svg" alt="close" />
                                     </label>
                                 </li>
                                 <Link to="/" className=" hover:underline hover:bg-orange-200 rounded-md p-2 ">

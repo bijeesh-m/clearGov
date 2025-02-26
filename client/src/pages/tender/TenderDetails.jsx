@@ -3,8 +3,6 @@ import Chart from "../../components/tender/Chart";
 import axios from "../../config/axios.config";
 
 const TenderDetails = () => {
-    const [isFilter, setIsFilter] = useState(false);
-
     const [filterType, setFilterType] = useState("tenderCategory");
 
     const [tenders, setTenders] = useState([]);
@@ -57,16 +55,7 @@ const TenderDetails = () => {
                                 >
                                     Tenders By Location
                                 </button>
-                                <button
-                                    onClick={() => handleFilterChange("tenderType")}
-                                    className={`flex ${
-                                        filterType === "tenderType" && "bg-red-500 text-white"
-                                    }  items-center px-3 py-1 mr-3 border text-xs font-medium rounded `}
-                                >
-                                    Tenders By Type
-                                </button>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -93,7 +82,6 @@ const TenderDetails = () => {
                                             <option value="pie">Pie</option>
                                             <option value="bar">Bar</option>
                                             <option value="area">Area</option>
-                                            <option value="radial">Radial</option>
                                         </select>
                                     </div>
                                 </div>

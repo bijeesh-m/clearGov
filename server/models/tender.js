@@ -4,51 +4,14 @@ const tenderSchema = new mongoose.Schema(
     {
         project: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
 
-        organisationChain: {
-            type: String,
-            required: true,
-        },
-        tenderReferenceNumber: {
-            type: String,
-            default: "REF" + Date.now(),
-            unique: true,
-        },
-        tenderID: {
-            type: String,
-            default: "TND" + Date.now(),
-            unique: true,
-        },
-        tenderType: {
-            type: String,
-            enum: ["Open", "Limited", "EOI"],
-            required: true,
-        },
-        tenderCategory: {
-            type: String,
-            enum: ["Works", "Goods", "Services", "Consultancy"],
-            required: true,
-        },
-        tenderLocation: {
-            type: String,
-            required: true,
-        },
+        organisationChain: { type: String, required: true },
+        tenderReferenceNumber: { type: String, default: "REF" + Date.now(), unique: true },
+        tenderID: { type: String, default: "TND" + Date.now(), unique: true },
+        tenderCategory: { type: String, enum: ["Works", "Goods", "Services", "Consultancy"], required: true },
+        tenderLocation: { type: String, required: true },
 
-        paymentMode: {
-            type: String,
-            enum: ["Online", "Offline"],
-            required: true,
-        },
+        paymentMode: { type: String, enum: ["Online", "Offline"], required: true },
 
-        formOfContract: {
-            type: String,
-            enum: ["Item Rate", "Lump Sum", "Percentage"],
-            required: true,
-        },
-        numberOfCovers: {
-            type: Number,
-            min: 1,
-            required: true,
-        },
         covers: [{ type: String }],
         tenderFee: { type: Number, required: true },
         workItemDetails: {
@@ -56,8 +19,6 @@ const tenderSchema = new mongoose.Schema(
             description: { type: String },
             tenderValue: { type: Number },
             location: { type: String },
-            bidValidityDays: { type: Number },
-            periodOfWorkDays: { type: Number },
         },
         criticalDates: {
             publishedDate: { type: Date, default: Date.now() },
@@ -66,22 +27,26 @@ const tenderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Not Started", "In Progress", "Completed", "Cancelled"],
-            default: "Not Started",
+            enum: ["open", "closed", "cancelled", "awarded", "started", "completed"],
+            default: "open",
         },
-        progress: {
-            type: Number,
-            default: 0,
-            min: 0,
-            max: 100,
-        },
+
         awardedBid: { type: mongoose.Schema.Types.ObjectId, ref: "Bid" }, // Stores the winning bid
         awardedContractor: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Stores the contractor who won
+
+        progress: { type: Number, default: 0 }, 
+
+        progressUpdates: [
+            {
+                progress: { type: Number, default: 0 }, // 0 to 100%
+                comment: { type: String },
+                attachment: { type: String }, // Optional file/image URL
+                date: { type: Date, default: Date.now },
+            },
+        ],
     },
-    {
-        timestamps: true,
-    }
+    { timestamps: true }
 );
 
-const tenderModel = mongoose.model("Tender", tenderSchema);
-module.exports = tenderModel;
+const Tender = mongoose.model("Tender", tenderSchema);
+module.exports = Tender;

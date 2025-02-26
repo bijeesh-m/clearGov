@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import axios from "../../config/axios.config";
 import UserEditForm from "../admin/UserEditForm";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const UserList = ({ users, setUsers }) => {
     const [searchQuerry, setSearchQuerry] = useState("");
     const [uidForDelete, setUidForDelete] = useState(null);
-    const [statusFilter, setStatusFilter] = useState("All"); // State for status filter
+    const [statusFilter, setStatusFilter] = useState("All");
 
     // Filter users based on search query and status
     const filteredUsers = useMemo(() => {
@@ -88,9 +89,6 @@ const UserList = ({ users, setUsers }) => {
                     <div className="p-4 rounded-lg border bg-white shadow-md sm:p-8">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold leading-none text-gray-900">Latest Customers</h3>
-                            <a href="#" className="text-sm font-medium text-blue-600 hover:underline">
-                                View all
-                            </a>
                         </div>
                         <div className="flow-root overflow-x-auto">
                             <ul role="list" className="divide-gray-200">
@@ -161,7 +159,7 @@ const UserList = ({ users, setUsers }) => {
                                                 </button>
                                                 <dialog id="my_modal_4" className="modal">
                                                     <div className="modal-box">
-                                                        <UserEditForm />
+                                                        <UserEditForm user={user} />
                                                         <div className="modal-action">
                                                             <form method="dialog">
                                                                 <button className="btn">Close</button>

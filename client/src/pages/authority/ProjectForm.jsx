@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import axios from "../../config/axios.config";
+import toast from "react-hot-toast";
+import { Navigate, useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingEffect/LoadingSpinner";
 
 const ProjectForm = () => {
     const [projectDetails, setProductDetails] = useState({
         projectScope: "",
+        organisationChain: "",
+        projectLocation: "",
         objectives: "",
         budget: "",
     });
+
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -14,20 +23,29 @@ const ProjectForm = () => {
     };
 
     const handleCreateProject = (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        setLoading(true);
         axios
             .post("/govauth/project", projectDetails)
             .then((res) => {
-                console.log(res);
+                setLoading(false);
+                toast.success("Project created");
+                navigate("/authority/projects");
             })
             .catch((err) => {
                 console.log(err);
+                setLoading(false);
+                if (err.status === 401) {
+                    toast.error("Session expired!");
+                    navigate("/login");
+                }
             });
     };
 
     return (
-        <div className="flex justify-center items-center ">
-            <form onSubmit={handleCreateProject} className="w-full max-w-lg bg-white shadow-md rounded-lg p-6 border">
+        <div className="flex justify-center items-center p-5">
+            {loading && <LoadingSpinner />}
+            <form onSubmit={handleCreateProject} className="w-full  bg-white   p-6 ">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Project Form</h2>
                 <div className="mb-4">
                     <label htmlFor="projectScope" className="block text-sm font-medium text-gray-700 mb-2">
@@ -40,8 +58,38 @@ const ProjectForm = () => {
                         value={projectDetails.projectScope}
                         onChange={handleChange}
                         required
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full outline-none border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter Organisation chain scope"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="projectScope" className="block text-sm font-medium text-gray-700 mb-2">
+                        Organisation Chain
+                    </label>
+                    <input
+                        type="text"
+                        id="organisationChain"
+                        name="organisationChain"
+                        value={projectDetails.organisationChain}
+                        onChange={handleChange}
+                        required
+                        className="w-full outline-none border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Enter project scope"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="projectScope" className="block text-sm font-medium text-gray-700 mb-2">
+                        Project Location
+                    </label>
+                    <input
+                        type="text"
+                        id="projectLocation"
+                        name="projectLocation"
+                        value={projectDetails.projectLocation}
+                        onChange={handleChange}
+                        required
+                        className="w-full outline-none border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter project location"
                     />
                 </div>
 
@@ -56,12 +104,10 @@ const ProjectForm = () => {
                         value={projectDetails.objectives}
                         required
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full outline-none border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Enter project objectives (comma-separated)"
                     ></textarea>
                 </div>
-
-               
 
                 <div className="mb-4">
                     <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
@@ -74,7 +120,7 @@ const ProjectForm = () => {
                         value={projectDetails.budget}
                         onChange={handleChange}
                         required
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full outline-none border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Enter budget amount"
                     />
                 </div>

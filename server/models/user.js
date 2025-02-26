@@ -1,6 +1,79 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const contractorBidderSchema = require("./bidderModel");
+
+const contactDetailsSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        enum: ["Mr", "Mrs", "Ms", "Dr"], // Add more titles if necessary
+    },
+    contactName: {
+        type: String,
+        required: true,
+    },
+    contactDOB: {
+        type: Date,
+    },
+    designation: {
+        type: String,
+    },
+    phoneCountryCode: {
+        type: String,
+        default: "91", // Default to India (91), can be changed
+    },
+    contactPhoneNumber: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/.test(v);
+            },
+            message: (props) => `${props.value} is not a valid phone number!`,
+        },
+    },
+});
+
+const contractorBidderSchema = new mongoose.Schema({
+    companyName: {
+        type: String,
+        required: true,
+    },
+    licenceHolderName: {
+        type: String,
+        required: true,
+    },
+
+    registrationNumber: {
+        type: String,
+        required: true,
+    },
+    registeredAddress: {
+        type: String,
+        required: true,
+    },
+
+    city: {
+        type: String,
+        required: true,
+    },
+    state: {
+        type: String,
+        required: true,
+    },
+    postalCode: {
+        type: String,
+        required: true,
+    },
+    panNumber: {
+        type: String,
+        required: true,
+        match: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, // PAN number format validation
+    },
+
+    contactDetails: {
+        type: contactDetailsSchema, // Embedded contact details schema
+        required: true,
+    },
+});
 
 const userSchema = new mongoose.Schema(
     {
@@ -48,10 +121,6 @@ const userSchema = new mongoose.Schema(
                 return this.role === "Contractor";
             },
         },
-        certifications: {
-            type: [String],
-            default: [],
-        },
         department: {
             type: String,
             required: function () {
@@ -60,12 +129,6 @@ const userSchema = new mongoose.Schema(
         },
         position: {
             type: String,
-            required: function () {
-                return this.role === "Government Authority";
-            },
-        },
-        tenderHistory: {
-            type: Array,
             required: function () {
                 return this.role === "Government Authority";
             },

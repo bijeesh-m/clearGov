@@ -2,9 +2,6 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ContractorRegister from "../pages/contractor/ContractorRegister";
 import Dashboard from "../pages/contractor/Dashboard";
-import SpendAnalysis from "../components/contractor/SpendAnalysis";
-import ProjectImplementation from "../components/contractor/ProjectImplementation";
-import TenderSubmission from "../components/contractor/TenderSubmission";
 import NotFound from "../pages/NotFound/NotFound";
 import Tenders from "../pages/tender/Tenders";
 import ContractorLayout from "../layouts/ContractorLayout";
@@ -15,6 +12,9 @@ import BidView from "../pages/contractor/BidView";
 import Profile from "../pages/contractor/Profile";
 import ExpenseReport from "../pages/contractor/ExpenseReport";
 import ViewExpenses from "../pages/contractor/ViewExpenses";
+import UpcomingDeadlines from "../pages/tender/UpComingDeadlines";
+import ProjectsPage from "../pages/contractor/ProjectsPage";
+import UpdateProgressPage from "../pages/contractor/UpdateProgressPage";
 
 const ContractorRoutes = () => {
     return (
@@ -26,13 +26,13 @@ const ContractorRoutes = () => {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/tenders" element={<Tenders />} />
                     <Route path="/tenders/:tenderId" element={<TenderView />} />
+                    <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/projects/:tenderId" element={<UpdateProgressPage />} />
                     <Route path="/bids" element={<MyBidsPage />} />
                     <Route path="/bids/:bidId" element={<BidView />} />
-                    <Route path="/spend-analysis" element={<SpendAnalysis />} />
                     <Route path="/bid-submission/:tenderId" element={<BidSubmission />} />
-                    <Route path="/project-implementation" element={<ProjectImplementation />} />
-                    {/* <Route path="/report" element={<ExpenseReport />} /> */}
                     <Route path="/latest-tenders" element={<Tenders />} />
+                    <Route path="/upcoming-deadlines" element={<UpcomingDeadlines />} />
                     <Route path="/expense-report-form" element={<ExpenseReport />} />
                     <Route path="/view-expense" element={<ViewExpenses />} />
                 </Route>

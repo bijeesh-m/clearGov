@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../config/axios.config";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../LoadingEffect/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 const ReportForm = ({ location, address }) => {
     console.log(address);
@@ -11,6 +13,8 @@ const ReportForm = ({ location, address }) => {
         attachments: [],
         isSubmitting: false,
     });
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setFormData((prevState) => ({
@@ -60,23 +64,21 @@ const ReportForm = ({ location, address }) => {
             toast.success("Report submitted successfully!");
             console.log(response.data);
         } catch (error) {
-            toast.error("Error submitting report");
+            if (error.status === 401) {
+                toast.error("Session expired!");
+                navigate("/login");
+            } else {
+                toast.error("Error submitting report");
+            }
             console.error(error);
         } finally {
             setFormData({ location: "", content: "", attachments: [], isSubmitting: false });
         }
     };
 
-    if (formData.isSubmitting) {
-        return (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="text-white text-lg">Loading...</div>
-            </div>
-        );
-    }
-
     return (
         <div className="min-h-screen  sidebar  py-4 px-4 sm:px-6 lg:px-8">
+            {formData.isSubmitting && <LoadingSpinner />}
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
                 {/* Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6">

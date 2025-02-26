@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import axios from "../../config/axios.config";
 
 const ProjectProgress = ({ projectId }) => {
-
     const [project, setProject] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,8 +32,6 @@ const ProjectProgress = ({ projectId }) => {
         return <div className="text-center text-gray-600">Project not found.</div>;
     }
 
-    
-
     return (
         <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
@@ -47,10 +44,7 @@ const ProjectProgress = ({ projectId }) => {
 
                     {/* Progress Bar */}
                     <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
-                        <div
-                            className="bg-blue-600 h-4 rounded-full"
-                            style={{ width: `${project.progress}%` }}
-                        ></div>
+                        <div className="bg-blue-600 h-4 rounded-full" style={{ width: `${project.progress}%` }}></div>
                     </div>
                     <p className="text-gray-700 text-sm">
                         Overall Progress: <span className="font-semibold">{project.progress}%</span>
@@ -78,7 +72,8 @@ const ProjectProgress = ({ projectId }) => {
                                     Location: <span className="font-semibold">{tender.tenderLocation}</span>
                                 </p>
                                 <p className="text-gray-700 mb-2">
-                                    Tender Value: <span className="font-semibold">${tender.workItemDetails.tenderValue}</span>
+                                    Tender Value:{" "}
+                                    <span className="font-semibold">${tender.workItemDetails.tenderValue}</span>
                                 </p>
                                 <p className="text-gray-700 mb-2">
                                     Bid Submission End Date:{" "}

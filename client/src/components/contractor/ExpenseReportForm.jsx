@@ -50,7 +50,7 @@ const ExpenseReportForm = () => {
     };
 
     return (
-        <div className=" max-w-xl flex mx-auto p-10">
+        <div className=" max-w-xl flex mx-auto min-h-screen p-10">
             <form onSubmit={handleSubmit} className="space-y-4 ">
                 <input
                     type="date"

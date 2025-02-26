@@ -8,8 +8,8 @@ const Dashboard = () => {
     return (
         <div className="flex">
             <Sidebar />
-            <div className=" w-full  h-screen flex flex-col  overflow-y-auto">
-                <div className=" overflow-y-auto h-full">
+            <div className=" w-full  min-h-screen flex flex-col  ">
+                <div className="  h-full">
                     <Outlet />
                 </div>
             </div>

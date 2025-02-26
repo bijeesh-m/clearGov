@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
 
 const Header = () => {
-    const user = useNavigate((state) => state.user);
+
     const handleLogout = () => {
         axiosInstance
             .delete("/auth/logout")
             .then((res) => {
                 toast.error(res.data.message);
-                window.location.replace("/login");
+                window.location.replace("/admin");
                 localStorage.clear();
             })
             .catch((err) => {
@@ -31,12 +29,6 @@ const Header = () => {
                         </div>
                     </div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow">
-                        <li>
-                            <a>Profile</a>
-                        </li>
-                        <li>
-                            <a>Settings</a>
-                        </li>
                         <li onClick={handleLogout}>
                             <a>Logout</a>
                         </li>

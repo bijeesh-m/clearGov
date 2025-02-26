@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 const MyBids = () => {
     const bids = useSelector((state) => state.bids);
 
-    console.log(bids);
 
     const handleWithdrawBid = (bidId) => {
         axiosInstance

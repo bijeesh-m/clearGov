@@ -5,16 +5,29 @@ const checkRole = require("../middleware/checkRole");
 
 const router = express.Router();
 
-router.use(verifyToken, checkRole(["Government Authority", "Citizen"]));
-
-router.post("/project", govauthController.createProject);
-router.get("/projects", govauthController.getProjects);
-router.get("/project/:id", govauthController.getProjectById);
-router.put("/project/:id", govauthController.updateProject);
-router.delete("/project/:id", govauthController.deleteProject);
-router.get("/bids", govauthController.bids);
-router.put("/tender/:tenderId/award/:bidId", govauthController.approveBid);
-
-
+router.post("/project", verifyToken, checkRole(["Government Authority"]), govauthController.createProject);
+router.get("/projects", verifyToken, govauthController.getProjects);
+router.get("/project/:id", verifyToken, govauthController.getProjectById);
+router.put("/project/:id", verifyToken, checkRole(["Government Authority", "Admin"]), govauthController.updateProject);
+router.delete(
+    "/project/:id",
+    verifyToken,
+    checkRole(["Government Authority", "Admin"]),
+    govauthController.deleteProject
+);
+router.get("/bids", verifyToken, checkRole(["Government Authority"]), govauthController.bids);
+router.get("/all-bids", verifyToken, checkRole(["Government Authority"]), govauthController.getAllBids);
+router.put(
+    "/tender/:tenderId/award/:bidId",
+    verifyToken,
+    checkRole(["Government Authority"]),
+    govauthController.approveBid
+);
+router.put(
+    "/projects/:projectId/complete",
+    verifyToken,
+    checkRole(["Government Authority"]),
+    govauthController.updateProjectStatus
+);
 
 module.exports = router;

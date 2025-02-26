@@ -101,7 +101,7 @@ export const contractorRegisterSchema = yup.object().shape({
 
 export const tenderFormSchema = yup.object({
     organisationChain: yup.string().required("Organisation Chain is required."),
-    tenderType: yup.string().required("Tender Type is required."),
+
     project: yup.string().required("Project ID is required."),
 
     tenderCategory: yup.string().required("Tender Category is required."),
@@ -110,10 +110,7 @@ export const tenderFormSchema = yup.object({
 
     paymentMode: yup.string().required("Payment Mode is required."),
 
-    formOfContract: yup.string().required("Form Of Contract is required."),
-
     covers: yup.array().of(yup.string().required("Cover is required.")).min(1, "At least one cover is required."),
-    numberOfCovers: yup.string().required("NomberOfCovers is required."),
     tenderFee: yup.number().required("Tender Fee is required.").positive("Tender Fee must be positive."),
 
     workItemDetails: yup.object().shape({
@@ -124,21 +121,10 @@ export const tenderFormSchema = yup.object({
         tenderValue: yup.number().required("Tender Value is required.").positive("Tender Value must be positive."),
 
         location: yup.string().required("Location is required."),
-
-        bidValidityDays: yup
-            .number()
-            .required("Bid Validity Days is required.")
-            .positive("Bid Validity Days must be positive."),
-
-        periodOfWorkDays: yup
-            .number()
-            .required("Period of Work Days is required.")
-            .positive("Period of Work Days must be positive."),
     }),
 
     criticalDates: yup.object().shape({
         bidOpeningDate: yup.date().required("Bid Opening Date is required."),
-
         bidSubmissionEndDate: yup.date().required("Bid Submission End Date is required."),
     }),
 });

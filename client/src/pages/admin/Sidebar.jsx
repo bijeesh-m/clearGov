@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     return (
-        <div>
+        <div className=" border-r-2 ">
             <div className="drawer lg:drawer-open z-[100]">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle absolute" />
                 <div className="drawer-content flex">
@@ -20,7 +20,7 @@ const Sidebar = () => {
                         </label>
                     </button>
                 </div>
-                <div className="drawer-side border ">
+                <div className="drawer-side  min-h-screen ">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <div className=" h-full flex flex-col bg-white z-50">
                         <div className=" flex-1 overflow-y-scroll sidebar">
@@ -41,6 +41,17 @@ const Sidebar = () => {
                                     {/* Sidebar content here */}
                                     <li>
                                         <Link to="/admin/dashboard/tenders">Tenders</Link>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p className=" text-lg bg-gray-500 text-white font-thin  px-4 py-2">
+                                    Project Management{" "}
+                                </p>
+                                <ul className="menu  text-base-content text-[16px]  w-80 p-4">
+                                    {/* Sidebar content here */}
+                                    <li>
+                                        <Link to="/admin/dashboard/projects">Projects</Link>
                                     </li>
                                 </ul>
                             </div>

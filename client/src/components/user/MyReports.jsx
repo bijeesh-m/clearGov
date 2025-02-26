@@ -13,14 +13,14 @@ const MyReports = () => {
                 const response = await axios.get("/user/myreports");
                 setReports(response.data.reports);
             } catch (error) {
-                toast.error("Error fetching reports");
-                console.error(error);
+                // console.log(error);
             } finally {
                 setIsLoading(false);
             }
         };
         fetchReports();
     }, []);
+
 
     if (isLoading) {
         return <div className="text-center text-gray-600">Loading reports...</div>;

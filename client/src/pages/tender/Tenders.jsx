@@ -1,15 +1,15 @@
-// import React, { useEffect, useState } from "react";
-// import TendersList from "../../components/tender/TendersList";
-// import axios from "../../config/axios.config";
 
 import { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Tenders = () => {
-    const [tenders, setTenders] = useState([]);
 
+    const [tenders, setTenders] = useState([]);
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axiosInstance
@@ -20,8 +20,14 @@ const Tenders = () => {
             })
             .catch((err) => {
                 console.log(err);
+                if (err.status === 401) {
+                    toast.error("Session expired!");
+                    navigate("/admin");
+                }
             });
     }, []);
+
+    console.log(user);
 
     return (
         <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
@@ -41,9 +47,6 @@ const Tenders = () => {
                             </th>
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Tender ID
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tender Type
                             </th>
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Tender Category
@@ -69,9 +72,7 @@ const Tenders = () => {
                                     {tender.workItemDetails.title}
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{tender.tenderID}</td>
-                                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {tender.tenderType}
-                                </td>
+
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {tender.tenderCategory}
                                 </td>
@@ -91,7 +92,7 @@ const Tenders = () => {
                                     >
                                         Apply Now
                                     </a>
-                                    {user?.role === "Admin" ? (
+                                    {!user ? (
                                         <a
                                             href={`/admin/dashboard/tender/${tender.tenderID}`}
                                             className="text-gray-600 hover:text-gray-900"

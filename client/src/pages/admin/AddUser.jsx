@@ -3,7 +3,7 @@ import UserForm from '../../components/admin/UserForm'
 
 const AddUser = () => {
   return (
-    <div className=' h-full'>
+    <div className='h-screen overflow-auto'>
         <UserForm/>
     </div>
   )

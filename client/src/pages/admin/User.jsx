@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import axios from "../../config/axios.config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserList from "../../components/user/UserList";
 import UserDetails from "../../components/user/UserDetails";
+import toast from "react-hot-toast";
 
 const User = () => {
     const { id } = useParams();
@@ -11,6 +12,9 @@ const User = () => {
 
 
     console.log(user);
+
+        const navigate = useNavigate()
+    
 
     useEffect(() => {
         axios
@@ -21,6 +25,10 @@ const User = () => {
             })
             .catch((err) => {
                 console.log(err);
+                if (err.status === 401) {
+                    toast.error("Session expired!");
+                    navigate("/admin");
+                }
             });
     }, []);
     return (

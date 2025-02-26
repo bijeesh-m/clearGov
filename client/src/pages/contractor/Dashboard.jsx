@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../config/axios.config";
 import jsPDF from "jspdf";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const user = useSelector((state) => state.user);
@@ -11,6 +11,9 @@ const Dashboard = () => {
     const [bids, setBids] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [activeTenders, setActiveTenders] = useState([]);
+    const [upComingDeadlines, setUpComingDeadlines] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         axiosInstance
@@ -23,6 +26,20 @@ const Dashboard = () => {
             .catch((err) => {
                 console.log(err);
             });
+    }, []);
+
+    useEffect(() => {
+        const fetchUpcomingDeadlines = async () => {
+            try {
+                const response = await axiosInstance.get("/contractor/upcoming-deadlines");
+                console.log(response);
+                setUpComingDeadlines(response.data);
+            } catch (error) {
+                console.log("Error fetching upcoming deadlines:", error);
+            }
+        };
+
+        fetchUpcomingDeadlines();
     }, []);
 
     useEffect(() => {
@@ -93,10 +110,15 @@ const Dashboard = () => {
                 </div>
 
                 {/* Upcoming Deadlines Card */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
+                <div
+                    onClick={() => navigate("/contractor/upcoming-deadlines")}
+                    className="bg-white p-6 rounded-lg shadow-md cursor-pointer"
+                >
                     <h3 className="text-lg font-semibold text-gray-700">Upcoming Deadlines</h3>
-                    <p className="text-2xl font-bold text-red-600">3</p>
-                    <p className="text-sm text-gray-500">3 tenders have deadlines in the next 7 days.</p>
+                    <p className="text-2xl font-bold text-red-600">{upComingDeadlines.length}</p>
+                    <p className="text-sm text-gray-500">
+                        {upComingDeadlines.length} tenders have deadlines in the next 7 days.
+                    </p>
                 </div>
             </div>
 
@@ -125,7 +147,7 @@ const Dashboard = () => {
                             {/* Example Row */}
                             {activeTenders.map((tender) => {
                                 return (
-                                    <tr>
+                                    <tr key={tender._id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {tender.workItemDetails.title}
                                         </td>
@@ -165,7 +187,7 @@ const Dashboard = () => {
                         .slice(0, 10)
                         .map((bid) => {
                             return (
-                                <div className="p-4 border border-gray-200 rounded-lg">
+                                <div key={bid._id} className="p-4 border border-gray-200 rounded-lg">
                                     <div className="flex justify-between items-center">
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">

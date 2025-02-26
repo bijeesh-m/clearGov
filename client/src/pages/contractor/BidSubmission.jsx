@@ -8,6 +8,7 @@ const BidSubmission = () => {
 
     const [covers, setCovers] = useState([]);
     const [tId, setTid] = useState("");
+    const [tValue, setTvalue] = useState("");
 
     useEffect(() => {
         const fetchTenders = async () => {
@@ -18,6 +19,7 @@ const BidSubmission = () => {
                     console.log(response);
                     setCovers(response.data.tender.covers);
                     setTid(response.data.tender._id);
+                    setTvalue(response.data?.tender?.workItemDetails?.tenderValue);
                 }
             } catch (error) {
                 console.log(error);
@@ -28,7 +30,7 @@ const BidSubmission = () => {
 
     return (
         <div>
-            <BidSubmit tenderId={tId} covers={covers} />
+            <BidSubmit tenderId={tId} covers={covers} tValue={tValue} />
         </div>
     );
 };

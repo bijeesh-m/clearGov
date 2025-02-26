@@ -1,25 +1,38 @@
 // UserProfile.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
 import MyReports from "../../components/user/MyReports";
 import { addUser } from "../../features/user/userSlice";
+import LoadingSpinner from "../../components/LoadingEffect/LoadingSpinner";
 
 const UserProfile = () => {
     const user = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
-        username: user.username,
-        email: user.email,
-        phoneNumber: user.phoneNumber || "",
-        address: user.address || "",
-        avatar: user.avatar || "",
+        username: "",
+        email: "",
+        phoneNumber: "",
+        address: "",
+        avatar: "",
     });
 
-    const [avatarPreview, setAvatarPreview] = useState(user.avatar);
+    const [avatarPreview, setAvatarPreview] = useState();
 
-    const dispatch = useDispatch()
+    useEffect(() => {
+        setFormData({
+            username: user.username,
+            email: user.email,
+            phoneNumber: user.phoneNumber || "",
+            address: user.address || "",
+            avatar: user?.avatar || "",
+        });
+        setAvatarPreview(user.avatar);
+    }, [user]);
+
+    const dispatch = useDispatch();
 
     // Handle form input changes
     const handleInputChange = (e) => {
@@ -39,6 +52,7 @@ const UserProfile = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const data = new FormData();
         data.append("username", formData.username);
         data.append("email", formData.email);
@@ -56,10 +70,12 @@ const UserProfile = () => {
             });
             toast.success("Profile updated successfully!");
             setIsEditing(false);
-            dispatch(addUser(response.data.updatedUser))
+            dispatch(addUser(response.data.updatedUser));
+            setIsLoading(false);
         } catch (error) {
             console.error("Error updating profile:", error);
             toast.error("Failed to update profile.");
+            setIsLoading(false);
         }
     };
 
@@ -69,7 +85,7 @@ const UserProfile = () => {
             .then((res) => {
                 toast.error(res.data.message);
                 window.location.replace("/login");
-                localStorage.clear()
+                localStorage.clear();
             })
             .catch((err) => {
                 console.log(err);
@@ -78,7 +94,7 @@ const UserProfile = () => {
 
     const handleEdit = () => {
         setIsEditing(!isEditing);
-        setAvatarPreview(user.avatar)
+        setAvatarPreview(user.avatar);
         window.scrollTo({
             top: 0,
             behavior: "smooth",
@@ -87,6 +103,7 @@ const UserProfile = () => {
 
     return (
         <div className="min-h-screen px-4 my-2 sm:px-6 lg:px-8">
+            {isLoading&&<LoadingSpinner/>}
             <div className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
                 {/* Profile Header */}
                 <div className="bg-gradient-to-r from-rose-400 to-rose-500 p-6">
@@ -210,8 +227,6 @@ const UserProfile = () => {
                         <h2 className="text-xl font-semibold text-gray-800 mb-4">Activity History</h2>
                         <MyReports />
                     </div>
-
-                  
                 </div>
             </div>
         </div>

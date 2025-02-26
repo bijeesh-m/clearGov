@@ -11,7 +11,6 @@ const ProjectDetails = () => {
         axiosInstance
             .get(`/govauth/project/${projectId}`)
             .then((res) => {
-                console.log(res);
                 setProject(res.data.project);
             })
             .catch((err) => {

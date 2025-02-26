@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
+import { addUser } from "../../features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const AdminLogin = () => {
     const [formData, setFormData] = useState({
@@ -11,17 +13,21 @@ const AdminLogin = () => {
 
     const navigate = useNavigate();
 
+    const dispatch = useDispatch()
+
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosInstance
             .post("/auth/adminlogin", formData)
             .then((res) => {
                 console.log(res);
+                dispatch(addUser(res.data.user));
                 toast.success("Login success!");
                 navigate("/admin/dashboard");
             })
             .catch((err) => {
                 console.log(err);
+                toast.error(err.response.data.message)
             });
     };
 

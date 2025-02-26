@@ -31,8 +31,7 @@ module.exports.viewTenderDetails = async (req, res) => {
 // Submit a bid for a tender
 module.exports.submitBid = async (req, res) => {
     try {
-        const { bidAmount, proposal, paymentMode, emdAmount, emdTransactionId, emdPaymentDate, bidValidityDays } =
-            req.body;
+        const { bidAmount, proposal, paymentMode, emdAmount, emdTransactionId, emdPaymentDate } = req.body;
 
         const tenderId = req.params.id;
 
@@ -55,7 +54,6 @@ module.exports.submitBid = async (req, res) => {
                 contractor: req.user.userId,
                 tender: tenderId,
                 bidAmount: bidAmount,
-                bidValidityDays,
                 proposal,
                 paymentMode,
                 emdAmount,
@@ -104,16 +102,28 @@ module.exports.withdrawBid = async (req, res) => {
             return res.status(404).json({ success: false, message: "Bid not found" });
         }
 
-        // Check if the bid can be withdrawn (e.g., tender is still open)
-        // const tender = await Tender.findById(bid.tender);
-        // if (tender.status !== "Open") {
-        //     return res.status(400).json({ success: false, message: "Bid cannot be withdrawn as the tender is closed" });
-        // }
-
         await Bid.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, message: "Bid withdrawn successfully" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error withdrawing bid", error: error.message });
+    }
+};
+
+module.exports.upComingDeadlines = async (req, res) => {
+    console.log('from upcoming');
+    try {
+        const today = new Date();
+        const sevenDaysLater = new Date(today);
+        sevenDaysLater.setDate(today.getDate() + 7);
+
+        const tenders = await Tender.find({
+            "criticalDates.bidSubmissionEndDate": { $gte: today, $lte: sevenDaysLater }, // Deadlines within the next 7 days
+        }).sort({ "criticalDates.bidSubmissionEndDate": 1 }); // Sort by deadline (ascending)
+
+        res.status(200).json(tenders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -150,18 +160,13 @@ module.exports.myExpenses = async (req, res) => {
     } catch (error) {}
 };
 
-
 module.exports.TendersWon = async (req, res) => {
-
     console.log("hi from won tenders");
     try {
-        
-
         // Find all tenders where this contractor has been awarded
         const wonTenders = await Tender.find({ awardedContractor: req.user.userId })
             .populate("awardedBid awardedContractor")
             .exec();
-
         res.status(200).json({ tenders: wonTenders });
     } catch (error) {
         console.log(error);

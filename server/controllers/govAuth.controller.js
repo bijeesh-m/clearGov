@@ -3,10 +3,11 @@ const Project = require("../models/project");
 const Bid = require("../models/bidModel");
 const Tender = require("../models/tender");
 
-// Project Initiators
+/////////////////////////// Create Project ////////////////////////
+
 exports.createProject = async (req, res) => {
     try {
-        let { projectScope, budget, objectives } = req.body;
+        let { projectScope, budget, objectives, organisationChain, projectLocation } = req.body;
 
         console.log(req.body);
 
@@ -15,25 +16,36 @@ exports.createProject = async (req, res) => {
             objectives = objectives.split(",").map((obj) => obj.trim()); // Split and trim each objective
         }
 
-        const project = await Project.create({ projectScope, budget, objectives });
+        const project = await Project.create({
+            projectScope,
+            budget,
+            objectives,
+            organisationChain,
+            projectLocation,
+            createdBy: req.user.userId,
+        });
         console.log(project);
         await project.save();
-        // res.status(201).json(project);
+        res.status(201).json({ message: "Success", project });
     } catch (error) {
         console.log(error);
         res.status(400).json({ error: error.message });
     }
 };
 
+/////////////////////////////  GET ALL PROJECTS /////////////////////////
+
 module.exports.getProjects = async (req, res) => {
     try {
-        const projects = await Project.find();
+        const projects = await Project.find().populate("tenders");
         res.status(200).json({ message: "Success", projects });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
     }
 };
+
+////////////////////////// GET SPECIFIC PROJECT BY ID ////////////////////////
 
 module.exports.getProjectById = async (req, res) => {
     try {
@@ -45,6 +57,8 @@ module.exports.getProjectById = async (req, res) => {
     }
 };
 
+////////////////////////////// UPDATE PROJECT DETAILS ///////////////////////////
+
 module.exports.updateProject = async (req, res) => {
     try {
         const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -55,22 +69,13 @@ module.exports.updateProject = async (req, res) => {
     }
 };
 
+/////////////////////////////////// DELETE A PROJECT ////////////////////////
+
 module.exports.deleteProject = async (req, res) => {
     try {
         const project = await Project.findByIdAndDelete(req.params.id);
         if (!project) return res.status(404).json({ error: "Project not found" });
         res.status(200).json({ message: "Project deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Project Approvers
-module.exports.approveProject = async (req, res) => {
-    try {
-        const project = await Project.findByIdAndUpdate(req.params.id, { status: "Approved" }, { new: true });
-        if (!project) return res.status(404).json({ error: "Project not found" });
-        res.status(200).json({ message: "Project approved successfully", project });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -87,57 +92,20 @@ module.exports.getProjectProgress = async (req, res) => {
     }
 };
 
-module.exports.submitProjectReport = async (req, res) => {
-    try {
-        const { report } = req.body;
-        const project = await Project.findByIdAndUpdate(req.params.id, { $push: { reports: report } }, { new: true });
-        if (!project) return res.status(404).json({ error: "Project not found" });
-        res.status(200).json({ message: "Report submitted successfully", project });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Finance Officials
-module.exports.submitExpenseReport = async (req, res) => {
-    try {
-        const expense = new Expense(req.body);
-        await expense.save();
-        res.status(201).json(expense);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-module.exports.getExpenses = async (req, res) => {
-    try {
-        const expenses = await Expense.find();
-        res.status(200).json(expenses);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-module.exports.approveExpense = async (req, res) => {
-    try {
-        const expense = await Expense.findByIdAndUpdate(req.params.id, { status: "Approved" }, { new: true });
-        if (!expense) return res.status(404).json({ error: "Expense not found" });
-        res.status(200).json({ message: "Expense approved successfully", expense });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-module.exports.getBudgetAnalysis = async (req, res) => {
-    try {
-        const totalBudget = await Expense.aggregate([{ $group: { _id: null, totalSpent: { $sum: "$amount" } } }]);
-        res.status(200).json({ totalSpent: totalBudget[0]?.totalSpent || 0 });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+////////////////////// GET BIDS ON TENDER /////////////////////////////
 
 module.exports.bids = async (req, res) => {
+    try {
+        const bids = await Bid.find({ bidStatus: "Submitted" }).populate("tender").populate("contractor");
+        res.status(200).json({ message: "success", bids });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching bids under review", error: error.message });
+    }
+};
+
+////////////////////////////// GET ALL BIDS ////////////////////////////
+
+module.exports.getAllBids = async (req, res) => {
     try {
         const bids = await Bid.find().populate("tender").populate("contractor");
         res.status(200).json({ message: "success", bids });
@@ -146,7 +114,7 @@ module.exports.bids = async (req, res) => {
     }
 };
 
-
+/////////////////////////////// APPROVE BID ////////////////////////////
 
 module.exports.approveBid = async (req, res) => {
     try {
@@ -164,7 +132,7 @@ module.exports.approveBid = async (req, res) => {
             {
                 awardedBid: bid._id,
                 awardedContractor: bid.contractor._id,
-                status: "Completed",
+                status: "awarded",
             },
             { new: true }
         ).populate("awardedBid awardedContractor");
@@ -185,4 +153,30 @@ module.exports.approveBid = async (req, res) => {
     }
 };
 
+module.exports.updateProjectStatus = async (req, res) => {
+    try {
+        const { projectId } = req.params;
 
+        // Find the project by ID and populate its tenders
+        const project = await Project.findById(projectId).populate("tenders");
+        if (!project) return res.status(404).json({ error: "Project not found" });
+
+        // Check if all tenders are completed (progress === 100)
+        const allTendersCompleted = project.tenders.every((t) => t.progress === 100);
+
+        if (!allTendersCompleted) {
+            return res.status(400).json({ error: "Cannot complete project: Not all tenders are completed" });
+        }
+
+        // Update the project status to "Completed"
+        project.status = "Completed";
+        await project.save();
+
+        await Tender.updateMany({ project: projectId }, { $set: { status: "closed" } });
+
+        res.json({ message: "Project status updated to Completed", project });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+};

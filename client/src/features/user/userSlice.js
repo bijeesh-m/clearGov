@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AuthContext } from "../../context/authContext";
 
-const { useEffect, useContext } = require("react");
 
 const userSlice = createSlice({
     name: "user",

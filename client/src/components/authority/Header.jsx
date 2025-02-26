@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <div className=" mb-5">
+        <div className=" shadow-md border border-gray-200 ">
             <header className=" p-5 flex w-full justify-between bg-slate-100">
                 <div className=" text-xl sm:text-2xl md:text-3xl font-bold ">
                     <Link to={"/authority"}>Authority Dashboard</Link>

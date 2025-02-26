@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import UserList from "../../components/user/UserList";
 import axios from "../../config/axios.config";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
+
+        const navigate = useNavigate()
+    
 
     useEffect(() => {
         axios
@@ -14,6 +19,10 @@ const Users = () => {
             })
             .catch((err) => {
                 console.log(err);
+                if (err.status === 401) {
+                    toast.error("Session expired!");
+                    navigate("/admin");
+                }
             });
     }, []);
 

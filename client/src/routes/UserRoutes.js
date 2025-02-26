@@ -26,27 +26,11 @@ const UserRoutes = () => {
                 <Route path="/user-dashboard" element={<UserDashboard />} />
                 <Route path="/" element={<HomeLayout />}>
                     <Route path="/" element={<Home />} />
-                    <Route
-                        path="/tender-details"
-                        element={
-                            <ProtectedRoute>
-                                <TenderDetails />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/reports"
-                        element={
-                            <ProtectedRoute>
-                                <SubmitReports />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/tender-details" element={<TenderDetails />} />
+                    <Route path="/reports" element={<SubmitReports />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/tender/:tenderId" element={<TenderView />} />
-                    <Route path="/projects" element={<ProtectedRoute >
-                        <Projects/>
-                    </ProtectedRoute>} />
+                    <Route path="/projects" element={<Projects />} />
                     <Route path="/projects/:projectId" element={<ProjectView />} />
                     <Route path="/search-results/:searchQuerry" element={<SearchResults />} />
                 </Route>

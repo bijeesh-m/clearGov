@@ -4,9 +4,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../LoadingEffect/LoadingSpinner";
 
-const CreateTender = ({ projectID }) => {
+const CreateTender = ({ projects }) => {
     const [covers, setCovers] = useState([""]);
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const addCover = () => {
         setCovers([...covers, ""]);
@@ -27,20 +32,23 @@ const CreateTender = ({ projectID }) => {
     });
 
     const onSubmit = (data) => {
-        console.log(data);
+        setLoading(true);
         axiosInstance
             .post("/tender/tender", data)
             .then((res) => {
-                console.log(res);
+                setLoading(false);
                 toast.success("Tender created!");
+                navigate("/authority");
             })
             .catch((err) => {
+                setLoading(false);
                 console.log(err);
             });
     };
 
     return (
-        <div className="mx-auto p-6 sm:p-10 md:p-20 bg-white shadow-lg ">
+        <div className="mx-auto p-6 sm:p-10 md:p-20 bg-white ">
+            {loading && <LoadingSpinner />}
             <h1 className="text-2xl font-bold mb-4">Tender Submission Form</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Organisation Chain */}
@@ -56,23 +64,16 @@ const CreateTender = ({ projectID }) => {
                 </div>
                 {/* Project */}
                 <div>
-                    <label className="block text-sm font-medium">Project Id</label>
-                    <input {...register("project")} className="mt-1 block w-full p-2 border border-gray-300 rounded" />
-                    {errors.project && <span className="text-red-500 text-sm">{errors.project.message}</span>}
-                </div>
-
-                {/* Tender Type */}
-                <div>
-                    <label className="block text-sm font-medium">Tender Type</label>
-                    <select
-                        {...register("tenderType")}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    >
-                        <option value="">Select Tender Type</option>
-                        <option value="Open">Open</option>
-                        <option value="Limited">Limited</option>
+                    <label className="block text-sm font-medium">Select Project</label>
+                    <select {...register("project")} className="mt-1 block w-full p-2 border border-gray-300 rounded">
+                        <option value="">Select a project</option>
+                        {projects.map((project) => (
+                            <option key={project._id} value={project._id}>
+                                {project.projectScope}
+                            </option>
+                        ))}
                     </select>
-                    {errors.tenderType && <span className="text-red-500 text-sm">{errors.tenderType.message}</span>}
+                    {errors.project && <span className="text-red-500 text-sm">{errors.project.message}</span>}
                 </div>
 
                 {/* Tender Category */}
@@ -119,30 +120,6 @@ const CreateTender = ({ projectID }) => {
                     {errors.paymentMode && <span className="text-red-500 text-sm">{errors.paymentMode.message}</span>}
                 </div>
 
-                {/* Form of Contract */}
-                <div>
-                    <label className="block text-sm font-medium">Form of Contract</label>
-                    <select
-                        {...register("formOfContract")}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    >
-                        <option value="">Select Form</option>
-                        <option value="Item Rate">Item Rate</option>
-                        <option value="Lump Sum">Lump Sum</option>
-                        <option value="Percentage">Percentage</option>
-                    </select>
-                    {errors.formOfContract && (
-                        <span className="text-red-500 text-sm">{errors.formOfContract.message}</span>
-                    )}
-                </div>
-
-                {/* Covers */}
-                {/* <div>
-          <label className="block text-sm font-medium">Covers</label>
-          <input {...register('covers[0]')} className="mt-1 block w-full p-2 border border-gray-300 rounded" />
-          {errors.covers && <span className="text-red-500 text-sm">{errors.covers.message}</span>}
-        </div> */}
-
                 <fieldset className="p-4 border border-gray-200 rounded-lg">
                     <legend className="text-lg font-semibold">Covers</legend>
 
@@ -177,18 +154,7 @@ const CreateTender = ({ projectID }) => {
                         Add Cover
                     </button>
                 </fieldset>
-                <div>
-                    <label className="block text-sm font-medium">Number of Covers</label>
-                    <input
-                        type="number"
-                        {...register("numberOfCovers")}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                        min="1"
-                    />
-                    {errors.numberOfCovers && (
-                        <span className="text-red-500 text-sm">{errors.numberOfCovers.message}</span>
-                    )}
-                </div>
+
                 <div>
                     <label className="block text-sm font-medium">Tender Fee</label>
                     <input
@@ -245,34 +211,6 @@ const CreateTender = ({ projectID }) => {
                         />
                         {errors.workItemDetails?.location && (
                             <span className="text-red-500 text-sm">{errors.workItemDetails.location.message}</span>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium">Bid Validity Days</label>
-                        <input
-                            type="number"
-                            {...register("workItemDetails.bidValidityDays")}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                        />
-                        {errors.workItemDetails?.bidValidityDays && (
-                            <span className="text-red-500 text-sm">
-                                {errors.workItemDetails.bidValidityDays.message}
-                            </span>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium">Period of Work Days</label>
-                        <input
-                            type="number"
-                            {...register("workItemDetails.periodOfWorkDays")}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                        />
-                        {errors.workItemDetails?.periodOfWorkDays && (
-                            <span className="text-red-500 text-sm">
-                                {errors.workItemDetails.periodOfWorkDays.message}
-                            </span>
                         )}
                     </div>
                 </fieldset>

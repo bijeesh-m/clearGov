@@ -3,7 +3,6 @@ const cloudinary = require("../config/cloudinary.config");
 const Report = require("../models/report");
 const Project = require("../models/project");
 
-
 module.exports.users = async (req, res) => {
     try {
         const users = await User.find();
@@ -92,35 +91,72 @@ module.exports.myReports = async (req, res) => {
         const reports = await Report.find({ reportedBy: userId }).populate("reportedBy");
         if (reports.length > 0) {
             res.status(200).json({ message: "reports fetched success!", reports });
+        }else{
+            res.status(404).json({ message: "reports not found!" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
+
 module.exports.updateUserProfile = async (req, res) => {
-    const { username, email, phoneNumber, address } = req.body;
+    const {
+        username,
+        email,
+        phoneNumber,
+        address,
+        position,
+        department,
+        contractorOrBidderDetails, // For Contractors
+    } = req.body;
 
     try {
-        // Find the user by ID (assuming the user ID is stored in req.user._id after authentication)
+        // Find the user by ID (assuming the user ID is stored in req.user.userId after authentication)
         const user = await User.findById(req.user.userId);
 
         if (!user) {
-            res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const result = await cloudinary.uploader.upload(req.file.path);
+        let result;
 
-        // Update user fields
+        // Upload new avatar to Cloudinary if a file is provided
+        if (req.file) {
+            result = await cloudinary.uploader.upload(req.file.path);
+        }
+
+        // Update common user fields
         user.username = username || user.username;
         user.email = email || user.email;
         user.phoneNumber = phoneNumber || user.phoneNumber;
         user.address = address || user.address;
-        user.avatar = result.secure_url || user.avatar;
+        user.avatar = result?.secure_url || user.avatar;
+
+        // Role-specific updates
+        switch (user.role) {
+            case "Government Authority":
+                user.position = position || user.position;
+                user.department = department || user.department;
+                break;
+
+            case "Contractor":
+                if (contractorOrBidderDetails) {
+                    user.contractorOrBidderDetails = {
+                        ...user.contractorOrBidderDetails,
+                        ...contractorOrBidderDetails,
+                    };
+                }
+                break;
+
+            // Add cases for other roles if needed
+            default:
+                break;
+        }
 
         // Save the updated user
         const updatedUser = await user.save();
-        res.status(200).json({ message: "user updated successfully!", updatedUser });
+        res.status(200).json({ message: "User updated successfully!", updatedUser });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -18,9 +18,6 @@ import {
 } from "recharts";
 
 const Chart = ({ chartType, tenders }) => {
-
-
-    
     console.log(chartType, tenders);
 
     const COLORS = [
@@ -57,12 +54,17 @@ const Chart = ({ chartType, tenders }) => {
 
     return (
         <div className=" grid grid-cols-1 md:grid-cols-2 ">
-            
             <div style={{ width: "100%", height: 300 }}>
                 {chartType === "pie" && (
                     <ResponsiveContainer>
                         <PieChart>
-                            <Pie className=" outline-none"  dataKey="tenders" data={tenders} fill="#8884d8" label>
+                            <Pie
+                                className=" outline-none"
+                                dataKey="tenders"
+                                data={tenders}
+                                fill="#8884d8"
+                                label={({ value }) => value.toLocaleString("en-IN")}
+                            >
                                 {tenders.map((t, i) => (
                                     <Cell key={i} style={{ color: "dark" }} fill={COLORS[i]} />
                                 ))}
@@ -76,6 +78,7 @@ const Chart = ({ chartType, tenders }) => {
                             width={500}
                             height={400}
                             data={tenders}
+                            label={({ value }) => value.toLocaleString("en-IN")}
                             margin={{
                                 top: 10,
                                 right: 30,
@@ -85,8 +88,8 @@ const Chart = ({ chartType, tenders }) => {
                         >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="_id" />
-                            <YAxis />
-                            <Tooltip />
+                            <YAxis tickFormatter={(value) => value.toLocaleString("en-IN")} />
+                            <Tooltip formatter={(value) => value.toLocaleString("en-IN")} />
                             <Area type="monotone" dataKey="tenders" stroke="#8884d8" fill="orange" />
                         </AreaChart>
                     </ResponsiveContainer>
@@ -106,26 +109,12 @@ const Chart = ({ chartType, tenders }) => {
                             barSize={20}
                         >
                             <XAxis dataKey="_id" scale="point" padding={{ left: 10, right: 10 }} />
-                            <YAxis />
-                            <Tooltip />
+                            <YAxis tickFormatter={(value) => value.toLocaleString("en-IN")} />
+                            <Tooltip formatter={(value) => value.toLocaleString("en-IN")} />
                             <Legend />
                             <CartesianGrid strokeDasharray="3 3" />
                             <Bar dataKey="tenders" fill="orange" background={{ fill: "#eee" }} />
                         </BarChart>
-                    </ResponsiveContainer>
-                )}
-                {chartType === "radial" && (
-                    <ResponsiveContainer width="100%" height="100%">
-                        <RadialBarChart innerRadius="10%" outerRadius="80%" barSize={10} data={tenders}>
-                            <RadialBar
-                                minAngle={15}
-                                label={{ position: "insideStart", fill: "#fff000" }}
-                                background
-                                clockWise
-                                dataKey="tenders"
-                            />
-                            <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={style} />
-                        </RadialBarChart>
                     </ResponsiveContainer>
                 )}
             </div>

@@ -27,7 +27,7 @@ const bidSchema = new mongoose.Schema(
     },
     bidStatus: {
       type: String,
-      enum: ["Submitted", "Under Review", "Accepted", "Rejected", "Withdrawn"],
+      enum: ["Submitted", "Under Review", "Accepted", "Rejected"],
       default: "Submitted",
     },
 
@@ -46,11 +46,7 @@ const bidSchema = new mongoose.Schema(
       paymentDate: { type: Date },
     },
 
-    // Bid Validity
-    bidValidityDays: {
-      type: Number,
-      required: true,
-    },
+
 
     // Covers (if applicable)
     covers: [

@@ -5,10 +5,10 @@ const verifyToken = require("../middleware/auth");
 const upload = require("../middleware/multer");
 
 // View all tenders
-router.get("/tenders", contractorController.viewAllTenders);
+router.get("/tenders",verifyToken, contractorController.viewAllTenders);
 
 // View a specific tender
-router.get("/tenders/:id", contractorController.viewTenderDetails);
+router.get("/tenders/:id",verifyToken, contractorController.viewTenderDetails);
 
 // Submit a bid for a tender
 router.post("/tenders/:id/bid", verifyToken, upload.any(), contractorController.submitBid);
@@ -20,7 +20,8 @@ router.get("/bids", verifyToken, contractorController.viewMyBids);
 router.get("/bids/:id", verifyToken, contractorController.viewBidDetails);
 
 // Withdraw a bid
-router.delete("/bids/:id", contractorController.withdrawBid);
+router.delete("/bids/:id",verifyToken, contractorController.withdrawBid);
+router.get("/upcoming-deadlines",verifyToken, contractorController.upComingDeadlines);
 
 router.post("/expense", verifyToken, upload.single("file"), contractorController.expense);
 router.get("/my-expenses", verifyToken, contractorController.myExpenses);

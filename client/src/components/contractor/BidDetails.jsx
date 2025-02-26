@@ -6,8 +6,8 @@ const BidDetails = ({ bid }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto bg-white  border rounded-lg overflow-hidden">
                 {/* Header Section */}
                 <div className="px-6 py-4 border-b border-gray-200">
                     <h1 className="text-2xl font-bold text-gray-800">Bid Details</h1>
@@ -81,12 +81,6 @@ const BidDetails = ({ bid }) => {
                                 </div>
                             )}
                         </div>
-                    </div>
-
-                    {/* Bid Validity */}
-                    <div className="mb-8">
-                        <h2 className="text-lg font-semibold text-gray-700">Bid Validity</h2>
-                        <p className="text-sm text-gray-600">Valid for {bid.bidValidityDays} days from submission.</p>
                     </div>
 
                     {/* Covers Section */}
