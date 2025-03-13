@@ -23,6 +23,9 @@ const Header = () => {
                             <Link to={"/authority/bids"}>Bids</Link>
                         </li>
                         <li>
+                            <Link to={"/authority/reports"}>User reports</Link>
+                        </li>
+                        <li>
                             <Link to={"/authority/profile"}>Account</Link>
                         </li>
                     </ul>

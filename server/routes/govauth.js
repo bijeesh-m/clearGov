@@ -30,4 +30,6 @@ router.put(
     govauthController.updateProjectStatus
 );
 
+router.get("/user-reports", verifyToken, govauthController.userReports);
+
 module.exports = router;

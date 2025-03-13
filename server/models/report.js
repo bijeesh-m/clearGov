@@ -6,10 +6,13 @@ const reportSchema = new mongoose.Schema(
             lat: String,
             lng: String,
         },
-        address:{
-            type:String
+        address: {
+            type: String,
         },
         content: {
+            type: String,
+        },
+        place: {
             type: String,
         },
         attachments: [

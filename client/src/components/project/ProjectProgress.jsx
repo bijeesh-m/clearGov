@@ -73,7 +73,7 @@ const ProjectProgress = ({ projectId }) => {
                                 </p>
                                 <p className="text-gray-700 mb-2">
                                     Tender Value:{" "}
-                                    <span className="font-semibold">${tender.workItemDetails.tenderValue}</span>
+                                    <span className="font-semibold">₹{tender.workItemDetails.tenderValue.toLocaleString()}</span>
                                 </p>
                                 <p className="text-gray-700 mb-2">
                                     Bid Submission End Date:{" "}
@@ -84,6 +84,33 @@ const ProjectProgress = ({ projectId }) => {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* Progress updates */}
+
+                <div className=" border bg-white p-5 my-5 rounded-lg">
+                    <h1 className=" font-bold text-2xl my-4 text-yellow-600">Project progress</h1>
+                    {project.progressUpdates
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .map((update) => {
+                            return (
+                                <div key={update._id} className=" border-b space-y-2 p-2 border-black">
+
+                                    <h1 className=" flex gap-4 font-bold">
+                                        Date: <p className=" font-semibold">{new Date(update.date).toLocaleString()}</p>
+                                    </h1>
+                                    <h1 className=" flex gap-4 font-bold">
+                                        progress: <p className=" font-semibold">{update.progress}%</p>
+                                    </h1>
+                                    <h1 className=" flex gap-4 font-bold">
+                                        Comments: <p className=" font-semibold">{update.comment}</p>
+                                    </h1>
+                                    <h1 className="  gap-4 font-bold">
+                                        Attachment: <img className=" w-52" src={update.attachment} alt="attachment" />
+                                    </h1>
+                                </div>
+                            );
+                        })}
                 </div>
             </div>
         </div>

@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "../../config/axios.config";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../../context/AuthContext";
+import { useSelector } from "react-redux";
 
 const Home = () => {
     const [tenders, setTenders] = useState([]);
     const [filterQuerry, setFilterQuerry] = useState("");
 
-    // const { user } = useContext(AuthContext);
+    const user = useSelector((state) => state.user);
 
-    // console.log(user);
+    console.log(user);
 
     useEffect(() => {
         axios
@@ -28,16 +29,20 @@ const Home = () => {
             <section className=" px-5 md:px-10 py-2">
                 <div className=" flex justify-between">
                     <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Tenders</h1>
-                    <div className=" ">
-                        <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
-                            <Link to={'/authority/register'}>Register as a Government Authority</Link>
-                        </button>
-                    </div>
-                    <div className=" ">
-                        <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
-                            <Link to={'/contractor/contractor-register'}>Online Bidder Enrollment</Link>
-                        </button>
-                    </div>
+                    {!Object.keys(user).length && (
+                        <div className=" flex gap-2">
+                            <div className=" ">
+                                <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
+                                    <Link to={"/authority/register"}>Register as a Government Authority</Link>
+                                </button>
+                            </div>
+                            <div className=" ">
+                                <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">
+                                    <Link to={"/contractor/contractor-register"}>Online Bidder Enrollment</Link>
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col ">
                     <div className=" ">

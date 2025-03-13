@@ -52,12 +52,13 @@ module.exports.updateProfile = async (req, res) => {
 };
 
 module.exports.report = async (req, res) => {
+    console.log(req.body);
+
     try {
-        const { location, content, address } = req.body;
+        const { location, content, address, place } = req.body;
+        
         const parsedLocation = JSON.parse(location); // Convert location from string to object
-
         let attachments = [];
-
         // Loop through each file and upload to Cloudinary
         for (const file of req.files) {
             const result = await cloudinary.uploader.upload(file.path);
@@ -66,18 +67,16 @@ module.exports.report = async (req, res) => {
                 media: result.secure_url,
             });
         }
-
         // Create report in database
         const newReport = new Report({
             location: parsedLocation,
             content,
+            place,
             address: address,
             attachments: attachments,
             reportedBy: req.user.userId,
         });
-
         await newReport.save();
-
         res.status(201).json({ message: "Report submitted successfully!", report: newReport });
     } catch (error) {
         console.error("Error submitting report:", error);
@@ -91,14 +90,13 @@ module.exports.myReports = async (req, res) => {
         const reports = await Report.find({ reportedBy: userId }).populate("reportedBy");
         if (reports.length > 0) {
             res.status(200).json({ message: "reports fetched success!", reports });
-        }else{
+        } else {
             res.status(404).json({ message: "reports not found!" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 module.exports.updateUserProfile = async (req, res) => {
     const {

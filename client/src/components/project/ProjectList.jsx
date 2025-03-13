@@ -42,7 +42,11 @@ const ProjectList = ({ projects }) => {
                             </p>
                         </div>
                         <button
-                            onClick={() => navigate(`/authority/project/status/${project._id}`)}
+                            onClick={() =>
+                                user?.role !== "Government Authority"
+                                    ? navigate(`/admin/dashboard/project/status/${project._id}`)
+                                    : navigate(`/authority/project/status/${project._id}`)
+                            }
                             disabled={project.status === "Completed"} // Disable if project is already completed
                             className={`px-4 py-2 rounded-md font-semibold transition-all duration-200 ${
                                 project.status === "Completed"

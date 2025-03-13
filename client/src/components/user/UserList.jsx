@@ -65,7 +65,7 @@ const UserList = ({ users, setUsers }) => {
                             name="searchquerry"
                             id="searchquerry"
                         />
-                        <img className="w-6 absolute top-4 right-2" src="/assets/search.svg" alt="search icon" />
+                        <img className="w-6 absolute top-4 right-2" src="/assets/Search.svg" alt="search icon" />
                     </div>
                     <div className="relative font-medium w-fit flex flex-col justify-center items-center sm:block">
                         Filter By:

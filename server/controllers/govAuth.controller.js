@@ -2,6 +2,7 @@ const Project = require("../models/project");
 // const Expense = require('../models/Expense');
 const Bid = require("../models/bidModel");
 const Tender = require("../models/tender");
+const Report = require("../models/report");
 
 /////////////////////////// Create Project ////////////////////////
 
@@ -178,5 +179,14 @@ module.exports.updateProjectStatus = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Server Error" });
+    }
+};
+
+module.exports.userReports = async (req, res) => {
+    try {
+        const reports = await Report.find();
+        res.status(200).json({ message: "success", reports });
+    } catch (error) {
+        res.status(500).json({ message: "failed", error: error.message });
     }
 };

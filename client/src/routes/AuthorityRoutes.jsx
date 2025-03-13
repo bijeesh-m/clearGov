@@ -11,6 +11,7 @@ import TenderForm from "../pages/authority/TenderForm";
 import BidsPage from "../pages/authority/BidsPage";
 import ProfilePage from "../pages/authority/ProfilePage";
 import ProjectStatus from "../pages/authority/ProjectStatus";
+import Reports from "../pages/authority/Reports";
 
 const AuthorityRoutes = () => {
     return (
@@ -20,6 +21,7 @@ const AuthorityRoutes = () => {
                     <Route index element={<Dashboard />} />
                     <Route path="/create-project" element={<ProjectForm />} />
                     <Route path="/projects" element={<Projects />} />
+                    <Route path="/reports" element={<Reports />} />
                     <Route path="/project/:projectId" element={<ProjectDetails />} />
                     <Route path="/project/status/:projectId" element={<ProjectStatus />} />
                     <Route path="/create-tender" element={<TenderForm />} />

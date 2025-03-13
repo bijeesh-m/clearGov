@@ -10,6 +10,7 @@ const ReportForm = ({ location, address }) => {
     const [formData, setFormData] = useState({
         location: address || "",
         content: "",
+        place: "",
         attachments: [],
         isSubmitting: false,
     });
@@ -51,7 +52,8 @@ const ReportForm = ({ location, address }) => {
         const formDataToSend = new FormData();
         formDataToSend.append("location", JSON.stringify(location));
         formDataToSend.append("content", formData.content);
-        formDataToSend.append("address", address);
+        formDataToSend.append("address", address || location);
+        formDataToSend.append("place", formData.place);
         formData.attachments.forEach((file) => formDataToSend.append("attachments", file));
 
         try {
@@ -75,6 +77,8 @@ const ReportForm = ({ location, address }) => {
             setFormData({ location: "", content: "", attachments: [], isSubmitting: false });
         }
     };
+
+    console.log(location);
 
     return (
         <div className="min-h-screen  sidebar  py-4 px-4 sm:px-6 lg:px-8">
@@ -103,6 +107,19 @@ const ReportForm = ({ location, address }) => {
                         />
                     </div>
 
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <input
+                            type="text"
+                            name="place"
+                            value={formData.place}
+                            onChange={handleInputChange}
+                            placeholder="Enter location manually"
+                            className="w-full placeholder:text-gray-600 placeholder:font-bold  p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required={!formData.location}
+                        />
+                    </div>
+
                     {/* Content Field */}
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
@@ -126,6 +143,7 @@ const ReportForm = ({ location, address }) => {
                             onChange={handleFileUpload}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             accept="image/*, video/*"
+                            required
                         />
                         <div className="mt-4 flex flex-wrap gap-4">
                             {formData.attachments.map((file, index) => (

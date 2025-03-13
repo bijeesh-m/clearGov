@@ -12,7 +12,7 @@ const defaultCenter = {
 };
 
 // Google Maps API Key
-const googleMapsApiKey = process.env.REACT_APP_MAP_API_KEY;
+const googleMapsApiKey = import.meta.env.VITE_MAP_API_KEY;
 
 const GoogleMapComponent = ({ markerPosition, setMarkerPosition, setAddress }) => {
     const [center, setCenter] = useState(defaultCenter);
@@ -74,7 +74,7 @@ const GoogleMapComponent = ({ markerPosition, setMarkerPosition, setAddress }) =
                 </div>
 
                 {/* Google Map */}
-                <GoogleMap mapContainerStyle={mapContainerStyle}  zoom={5} center={center} onClick={handleMapClick}>
+                <GoogleMap mapContainerStyle={mapContainerStyle} zoom={5} center={center} onClick={handleMapClick}>
                     {/* Display marker if position is set */}
                     {markerPosition && <Marker position={markerPosition} />}
                 </GoogleMap>
