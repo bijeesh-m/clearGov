@@ -114,7 +114,7 @@ const BidApproval = () => {
                                             Approve
                                         </button>
                                         <button
-                                            onClick={() => handleBidStatus(bid._id, "Rejected")}
+                                            onClick={() => handleBidStatus(bid._id,bid.tender._id, "Rejected")}
                                             className="px-4 py-2 bg-red-400 shadow-lg shadow-red-400 text-white rounded-lg hover:bg-red-700 transition duration-300"
                                         >
                                             Reject
