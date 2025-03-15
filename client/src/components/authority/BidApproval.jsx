@@ -63,7 +63,7 @@ const BidApproval = () => {
                                 {/* Bid Content */}
                                 <div className="p-6">
                                     <p className="text-gray-700 mb-4">
-                                        <span className="font-semibold">Bid Amount:</span> $
+                                        <span className="font-semibold">Bid Amount:</span> ₹
                                         {bid.bidAmount.toLocaleString()}
                                     </p>
                                     <p className="text-gray-700 mb-4">
@@ -73,7 +73,7 @@ const BidApproval = () => {
                                         <span className="font-semibold">Payment Mode:</span> {bid.paymentMode}
                                     </p>
                                     <p className="text-gray-700 mb-4">
-                                        <span className="font-semibold">EMD Amount:</span> $
+                                        <span className="font-semibold">EMD Amount:</span> ₹
                                         {bid.emdAmount.toLocaleString()}
                                     </p>
 
