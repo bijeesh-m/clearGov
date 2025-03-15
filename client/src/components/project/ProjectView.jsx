@@ -75,7 +75,7 @@ const ProjectView = ({ project, setProject }) => {
                         <span className="font-semibold">Organisation Chain:</span> {project.organisationChain}
                     </p>
                     <p className="text-gray-700">
-                        <span className="font-semibold">Budget:</span> ${project.budget?.toLocaleString()}
+                        <span className="font-semibold">Budget:</span> ₹{project.budget?.toLocaleString()}
                     </p>
                     <p className="text-gray-700">
                         <span className="font-semibold">Status:</span>{" "}
@@ -187,7 +187,6 @@ const ProjectView = ({ project, setProject }) => {
                                 className="w-full p-2 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 placeholder="Enter project location"
                             />
-
 
                             <button className="text-center w-full bg-green-500 rounded-md font-bold py-2">Save</button>
                         </form>

@@ -64,7 +64,7 @@ const MyBids = () => {
                                         {new Date(bid.submittedAt).toDateString()}
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        ${bid.bidAmount.toLocaleString()}
+                                        ₹{bid.bidAmount.toLocaleString()}
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap">
                                         <span

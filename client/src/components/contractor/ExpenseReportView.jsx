@@ -21,7 +21,7 @@ const ExpenseReportView = ({ expenses }) => {
                                 <td className="px-4 py-2">{new Date(expense.date).toLocaleDateString()}</td>
                                 <td className="px-4 py-2">{expense.contractor}</td>
                                 <td className="px-4 py-2">{expense.description}</td>
-                                <td className="px-4 py-2">${expense.amount.toFixed(2)}</td>
+                                <td className="px-4 py-2">₹{expense.amount.toFixed(2)}</td>
                                 <td className="px-4 py-2">
                                     {expense.file ? (
                                         <a href={expense.file} className="text-blue-500 ">

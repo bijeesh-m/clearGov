@@ -26,7 +26,7 @@ const ProjectList = ({ projects }) => {
                                 <strong>Organisation Chain:</strong> {project.organisationChain}
                             </p>
                             <p className="text-gray-600 mb-2">
-                                <strong>Budget:</strong> ${project.budget}
+                                <strong>Budget:</strong> ₹{project.budget.toLocaleString()}
                             </p>
                             <p className="text-gray-600 mb-2">
                                 <strong>Status:</strong> {project.status}

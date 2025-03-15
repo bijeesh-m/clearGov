@@ -36,6 +36,7 @@ const ExpenseReportForm = () => {
                 .post("/contractor/expense", expenseData)
                 .then((res) => {
                     toast.success("Report submitted successfully!");
+                    window.location.replace("/contractor")
                 })
                 .catch((err) => {
                     toast.error(err.response.data.error);

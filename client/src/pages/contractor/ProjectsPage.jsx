@@ -57,7 +57,7 @@ const ProjectsPage = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap flex items-center gap-5 text-sm font-medium">
-                                            {tender.status!=="started"?<StartProjectButton tenders={tenders} setTenders={setTenders} tenderId={tender._id} />:<a
+                                            {tender.status!=="started"?<StartProjectButton tenderId={tender._id} />:<a
                                                 href={`/contractor/projects/${tender.tenderID}`}
                                                 className="bg-violet-100 text-violet-800 px-3 py-1 rounded-full hover:text-violet-900"
                                             >

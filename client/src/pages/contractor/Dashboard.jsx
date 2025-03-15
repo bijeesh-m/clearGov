@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const user = useSelector((state) => state.user);
-    console.log(user);
     const [submittedBids, setSubmittedBids] = useState(0);
     const [bids, setBids] = useState([]);
     const [expenses, setExpenses] = useState([]);
@@ -32,7 +31,6 @@ const Dashboard = () => {
         const fetchUpcomingDeadlines = async () => {
             try {
                 const response = await axiosInstance.get("/contractor/upcoming-deadlines");
-                console.log(response);
                 setUpComingDeadlines(response.data);
             } catch (error) {
                 console.log("Error fetching upcoming deadlines:", error);
@@ -58,7 +56,6 @@ const Dashboard = () => {
             .get(`/contractor/won-tenders`)
             .then((res) => {
                 setActiveTenders(res.data.tenders);
-                console.log(res);
             })
             .catch((err) => {
                 console.log(err);

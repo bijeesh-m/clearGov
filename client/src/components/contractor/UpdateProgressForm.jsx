@@ -42,6 +42,7 @@ const UpdateProgressForm = ({ tenderId }) => {
                 toast.success(res.data.message);
                 setFormData({ progress: "", comment: "", attachment: null }); // Reset form
                 setIsLoading(false);
+                window.location.replace('/contractor')
             })
             .catch((err) => {
                 console.error("Error updating progress:", err);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
 
-const StartProjectButton = ({ tenderId, tenders, setTenders }) => {
+const StartProjectButton = ({ tenderId }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleStartProject = async () => {
@@ -10,14 +10,7 @@ const StartProjectButton = ({ tenderId, tenders, setTenders }) => {
         try {
             const response = await axiosInstance.put(`/tender/tender/${tenderId}/start`);
             toast.success(response.data.message);
-            setTenders(tenders.map((tender) => {
-                    if (tender.tenderID === tenderId) {
-                        tender.status = "started";
-                    }
-
-                    return tender;
-                })
-            );
+            window.location.reload();
         } catch (error) {
             console.error("Error starting project:", error);
             toast.error(error.response?.data?.error || "Failed to start project");
