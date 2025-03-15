@@ -7,12 +7,12 @@ import User from "../pages/admin/User";
 import AdminLogin from "../pages/admin/AdminLogin";
 import AddUser from "../pages/admin/AddUser";
 import NotFound from "../pages/NotFound/NotFound";
-import Tenders from "../pages/tender/Tenders";
 import Tender from "../pages/admin/Tender";
 import Projects from "../pages/authority/Projects";
 import ProjectDetails from "../pages/authority/ProjectDetails";
 import ProjectStatus from "../pages/authority/ProjectStatus";
 import TenderManagement from "../pages/admin/TenderManagement";
+import UserFeedBacks from "../pages/admin/UserFeedBacks";
 
 const AdminRoutes = () => {
     return (
@@ -28,6 +28,7 @@ const AdminRoutes = () => {
                         <Route path="/dashboard/user/:id" element={<User />} />
                         <Route path="/dashboard/add-user" element={<AddUser />} />
                         <Route path="/dashboard/projects" element={<Projects />} />
+                        <Route path="/dashboard/feedbacks" element={<UserFeedBacks />} />
                         <Route path="/dashboard/project/:projectId" element={<ProjectDetails />} />
                         <Route path="/dashboard/project/status/:projectId" element={<ProjectStatus />} />
                     </Route>

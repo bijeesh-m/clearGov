@@ -55,6 +55,17 @@ const Sidebar = () => {
                                     </li>
                                 </ul>
                             </div>
+                            <div>
+                                <p className=" text-lg bg-gray-500 text-white font-thin  px-4 py-2">
+                                    Feedback Management{" "}
+                                </p>
+                                <ul className="menu  text-base-content text-[16px]  w-80 p-4">
+                                    {/* Sidebar content here */}
+                                    <li>
+                                        <Link to="/admin/dashboard/feedbacks">Feedbacks</Link>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

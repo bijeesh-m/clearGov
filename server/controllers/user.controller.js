@@ -2,6 +2,7 @@ const User = require("../models/user");
 const cloudinary = require("../config/cloudinary.config");
 const Report = require("../models/report");
 const Project = require("../models/project");
+const feedBack = require("../models/feedback");
 
 module.exports.users = async (req, res) => {
     try {
@@ -56,7 +57,7 @@ module.exports.report = async (req, res) => {
 
     try {
         const { location, content, address, place } = req.body;
-        
+
         const parsedLocation = JSON.parse(location); // Convert location from string to object
         let attachments = [];
         // Loop through each file and upload to Cloudinary
@@ -179,6 +180,18 @@ module.exports.projectProgress = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             message: "Error fetching project progress",
+            error: error.message,
+        });
+    }
+};
+module.exports.submitFeedBack = async (req, res) => {
+    try {
+        console.log(req.body);
+        const newFeedBack = await feedBack.create(req.body);
+        res.status(201).json({ message: "Feedback submitted!", newFeedBack });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error submitting feedback ",
             error: error.message,
         });
     }

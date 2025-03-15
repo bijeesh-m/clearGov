@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Tender = require("../models/tender");
+const feedBack = require("../models/feedback");
 
 // User Management
 module.exports.getAllUsers = async (req, res) => {
@@ -114,20 +115,11 @@ module.exports.getTenderSubmissions = async (req, res) => {
     }
 };
 
-// Reports & Analytics
-module.exports.getTenderReports = async (req, res) => {
-    // Implement report generation logic here
-};
-
-module.exports.getUserReports = async (req, res) => {
-    // Implement report generation logic here
-};
-
-// System Configurations
-module.exports.addCategory = async (req, res) => {
-    // Implement category addition logic here
-};
-
-module.exports.getCategories = async (req, res) => {
-    // Implement fetching categories logic here
+module.exports.getUserFeedBacks = async (req, res) => {
+    try {
+        const feedbacks = await feedBack.find();
+        res.status(200).json(feedbacks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };

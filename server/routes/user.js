@@ -14,5 +14,6 @@ router.put("/update", authenticate, upload.single("avatar"), userController.upda
 router.post("/reports", authenticate, checkRole(["Citizen"]), upload.any("attachments"), userController.report);
 router.get("/myreports", authenticate, userController.myReports);
 router.get("/project-progress", authenticate, userController.projectProgress);
+router.post("/feedback", authenticate, userController.submitFeedBack);
 
 module.exports = router;

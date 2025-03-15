@@ -21,13 +21,10 @@ router.get("/tenders", adminController.getAllTenders);
 router.put("/tenders/:id", adminController.updateTender);
 router.delete("/tenders/:id", adminController.deleteTender);
 router.get("/tenders/:id/submissions", adminController.getTenderSubmissions);
+router.get("/feedbacks", adminController.getUserFeedBacks);
 
-// Reports & Analytics
-router.get("/reports/tenders", adminController.getTenderReports);
-router.get("/reports/users", adminController.getUserReports);
 
-// System Configurations
-router.post("/categories", adminController.addCategory);
-router.get("/categories", adminController.getCategories);
+
+
 
 module.exports = router;

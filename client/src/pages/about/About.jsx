@@ -1,6 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
+import axiosInstance from "../../config/axios.config";
 
 const About = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: "",
+    });
+
+    // State for submission status
+    const [status, setStatus] = useState("");
+
+    // Handle input changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Simulate API call (replace with your actual endpoint)
+            setStatus("Sending...");
+
+            const response = await axiosInstance.post("/user/feedback", formData);
+            console.log(response);
+
+            console.log("Form submitted:", formData);
+            setStatus("Message sent successfully!");
+
+            // Reset form
+            setFormData({
+                name: "",
+                email: "",
+                message: "",
+            });
+
+            // Clear status after 3 seconds
+            setTimeout(() => setStatus(""), 3000);
+        } catch (error) {
+            setStatus("Error sending message. Please try again.");
+            console.error(error);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Header Section */}
@@ -19,10 +67,10 @@ const About = () => {
                 <section className="mb-12">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6">Who We Are</h2>
                     <p className="text-gray-600 leading-relaxed">
-                        We are a dedicated team of professionals committed to revolutionizing the tender management process.
-                        Our platform connects contractors and organizations, making it easier to find, bid on, and manage
-                        tenders efficiently. With a focus on transparency, security, and user experience, we aim to
-                        simplify the tender process for everyone involved.
+                        We are a dedicated team of professionals committed to revolutionizing the tender management
+                        process. Our platform connects contractors and organizations, making it easier to find, bid on,
+                        and manage tenders efficiently. With a focus on transparency, security, and user experience, we
+                        aim to simplify the tender process for everyone involved.
                     </p>
                 </section>
 
@@ -61,7 +109,8 @@ const About = () => {
                             <h3 className="text-xl font-semibold text-gray-800">John Doe</h3>
                             <p className="text-gray-600">CEO & Founder</p>
                             <p className="text-sm text-gray-500 mt-2">
-                                John is a visionary leader with over 15 years of experience in the construction industry.
+                                John is a visionary leader with over 15 years of experience in the construction
+                                industry.
                             </p>
                         </div>
 
@@ -99,33 +148,70 @@ const About = () => {
                 <section>
                     <h2 className="text-3xl font-bold text-gray-800 mb-6">Get in Touch</h2>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <p className="text-gray-600 mb-4">
-                            Have questions or feedback? We'd love to hear from you!
-                        </p>
-                        <form>
+                        <p className="text-gray-600 mb-4">Have questions or feedback? We'd love to hear from you!</p>
+                        <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <input
-                                    type="text"
-                                    placeholder="Your Name"
-                                    className="p-2 border border-gray-300 rounded-lg"
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Your Email"
-                                    className="p-2 border border-gray-300 rounded-lg"
+                                <div>
+                                    <label htmlFor="name" className="sr-only">
+                                        Your Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        placeholder="Your Name"
+                                        className="p-2 border border-gray-300 rounded-lg w-full"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="sr-only">
+                                        Your Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="Your Email"
+                                        className="p-2 border border-gray-300 rounded-lg w-full"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="message" className="sr-only">
+                                    Your Message
+                                </label>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="Your Message"
+                                    rows="4"
+                                    className="w-full p-2 border border-gray-300 rounded-lg mt-4"
+                                    required
                                 />
                             </div>
-                            <textarea
-                                placeholder="Your Message"
-                                rows="4"
-                                className="w-full p-2 border border-gray-300 rounded-lg mt-4"
-                            ></textarea>
                             <button
                                 type="submit"
                                 className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
                             >
                                 Send Message
                             </button>
+                            {status && (
+                                <p
+                                    className={`mt-2 text-sm ${
+                                        status.includes("Error") ? "text-red-600" : "text-green-600"
+                                    }`}
+                                >
+                                    {status}
+                                </p>
+                            )}
                         </form>
                     </div>
                 </section>
