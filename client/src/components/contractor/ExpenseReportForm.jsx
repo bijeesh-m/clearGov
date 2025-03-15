@@ -36,7 +36,7 @@ const ExpenseReportForm = () => {
                 .post("/contractor/expense", expenseData)
                 .then((res) => {
                     toast.success("Report submitted successfully!");
-                    window.location.replace("/contractor")
+                    window.location.replace("/contractor");
                 })
                 .catch((err) => {
                     toast.error(err.response.data.error);
@@ -81,9 +81,10 @@ const ExpenseReportForm = () => {
                 <input
                     type="file"
                     name="file"
-                    accept="image/*,.pdf"
+                    accept="image/*"
                     onChange={handleChange}
                     className="w-full border p-2 rounded"
+                    required
                 />
                 <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
                     {Loading ? "Loading..." : "Add Expense"}
