@@ -76,9 +76,7 @@ const BidApproval = () => {
                                         <span className="font-semibold">EMD Amount:</span> $
                                         {bid.emdAmount.toLocaleString()}
                                     </p>
-                                    <p className="text-gray-700 mb-4">
-                                        <span className="font-semibold">Bid Validity:</span> {bid.bidValidityDays} days
-                                    </p>
+
                                     <p className="text-gray-700 mb-4">
                                         <span className="font-semibold">Submitted At:</span>{" "}
                                         {new Date(bid.submittedAt).toLocaleDateString()}
@@ -114,7 +112,7 @@ const BidApproval = () => {
                                             Approve
                                         </button>
                                         <button
-                                            onClick={() => handleBidStatus(bid._id,bid.tender._id, "Rejected")}
+                                            onClick={() => handleBidStatus(bid._id, bid.tender._id, "Rejected")}
                                             className="px-4 py-2 bg-red-400 shadow-lg shadow-red-400 text-white rounded-lg hover:bg-red-700 transition duration-300"
                                         >
                                             Reject
