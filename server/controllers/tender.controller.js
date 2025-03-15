@@ -153,7 +153,7 @@ module.exports.updateProgress = async (req, res) => {
 
         // // Add progress update
 
-        const newProgressUpdate = { progress, comment, attachment: result.secure_url, date: new Date() };
+        const newProgressUpdate = { progress, comment, attachment: result ? result.secure_url:"", date: new Date() };
 
         tender.progressUpdates.push(newProgressUpdate);
         tender.progress = progress;

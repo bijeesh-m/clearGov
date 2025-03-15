@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import toast from "react-hot-toast";
 
-const StartProjectButton = ({ tenderId }) => {
+const StartProjectButton = ({ tenderId, tenders, setTenders }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleStartProject = async () => {
@@ -10,6 +10,14 @@ const StartProjectButton = ({ tenderId }) => {
         try {
             const response = await axiosInstance.put(`/tender/tender/${tenderId}/start`);
             toast.success(response.data.message);
+            setTenders(tenders.map((tender) => {
+                    if (tender.tenderID === tenderId) {
+                        tender.status = "started";
+                    }
+
+                    return tender;
+                })
+            );
         } catch (error) {
             console.error("Error starting project:", error);
             toast.error(error.response?.data?.error || "Failed to start project");
@@ -20,16 +28,15 @@ const StartProjectButton = ({ tenderId }) => {
 
     return (
         <div className=" ">
-               
-                <button
-                    onClick={handleStartProject}
-                    disabled={isLoading}
-                    className={` px-3 bg-blue-100 text-blue-800 py-1 rounded-full  transition duration-300 ${
-                        isLoading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                >
-                    {isLoading ? "Starting..." : "Start Project"}
-                </button>
+            <button
+                onClick={handleStartProject}
+                disabled={isLoading}
+                className={` px-3 bg-blue-100 text-blue-800 py-1 rounded-full  transition duration-300 ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+            >
+                {isLoading ? "Starting..." : "Start Project"}
+            </button>
         </div>
     );
 };

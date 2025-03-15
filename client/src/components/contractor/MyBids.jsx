@@ -58,7 +58,7 @@ const MyBids = () => {
                             {bids.map((bid) => (
                                 <tr key={bid._id}>
                                     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {bid.tender.workItemDetails.title}
+                                        {bid.tender?.workItemDetails?.title}
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {new Date(bid.submittedAt).toDateString()}
