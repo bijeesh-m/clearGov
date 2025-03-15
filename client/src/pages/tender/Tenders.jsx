@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import { useSelector } from "react-redux";
@@ -6,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Tenders = () => {
-
     const [tenders, setTenders] = useState([]);
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
@@ -83,7 +81,7 @@ const Tenders = () => {
                                     {tender.criticalDates.bidSubmissionEndDate}
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    ${tender.tenderFee}
+                                    ₹{tender.tenderFee.toLocaleString()}
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                                     <a
