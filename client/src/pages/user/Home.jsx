@@ -29,7 +29,7 @@ const Home = () => {
             <section className=" px-5 md:px-10 py-2">
                 <div className=" flex justify-between">
                     <h1 className=" my-4 text-lg md:text-2xl font-bold">Latest Tenders</h1>
-                    {!Object.keys(user).length && (
+                    {(!user || user.role !== "Citizen") && (
                         <div className=" flex gap-2">
                             <div className=" ">
                                 <button className="  text-[10px]  p-2 rounded border mt-3  sm:text-[15px] hover:bg-green-500 hover:translate-x-2 hover:text-white transition-all duration-1000">

@@ -9,6 +9,7 @@ import LoadingSpinner from "../../components/LoadingEffect/LoadingSpinner";
 
 const UserProfile = () => {
     const user = useSelector((state) => state.user);
+
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -23,13 +24,13 @@ const UserProfile = () => {
 
     useEffect(() => {
         setFormData({
-            username: user.username,
-            email: user.email,
-            phoneNumber: user.phoneNumber || "",
-            address: user.address || "",
+            username: user?.username,
+            email: user?.email,
+            phoneNumber: user?.phoneNumber || "",
+            address: user?.address || "",
             avatar: user?.avatar || "",
         });
-        setAvatarPreview(user.avatar);
+        setAvatarPreview(user?.avatar);
     }, [user]);
 
     const dispatch = useDispatch();
@@ -114,8 +115,8 @@ const UserProfile = () => {
                         </div>
                         {/* Name and Role */}
                         <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-white">{user.username}</h1>
-                            <p className="text-sm text-blue-200">{user.role}</p>
+                            <h1 className="text-2xl font-bold text-white">{user?.username}</h1>
+                            <p className="text-sm text-blue-200">{user?.role}</p>
                         </div>
 
                         <div className="flex-1 justify-end gap-2 flex">
@@ -204,19 +205,19 @@ const UserProfile = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm text-gray-600">Name</p>
-                                    <p className="text-gray-800">{user.username}</p>
+                                    <p className="text-gray-800">{user?.username}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-600">Email</p>
-                                    <p className="text-gray-800">{user.email}</p>
+                                    <p className="text-gray-800">{user?.email}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-600">Phone</p>
-                                    <p className="text-gray-800">{user.phoneNumber ? user.phoneNumber : "NILL"}</p>
+                                    <p className="text-gray-800">{user?.phoneNumber ? user?.phoneNumber : "NILL"}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-600">Address</p>
-                                    <p className="text-gray-800">{user.address ? user.address : "NILL"}</p>
+                                    <p className="text-gray-800">{user?.address ? user?.address : "NILL"}</p>
                                 </div>
                             </div>
                         )}

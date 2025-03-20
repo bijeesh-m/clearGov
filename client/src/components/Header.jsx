@@ -23,7 +23,12 @@ const Header = () => {
                     <div className="container px-4 flex justify-between items-center">
                         <div className=" md:hidden bg-red-3f00 rounded">
                             <label htmlFor="my-drawer-4" className="drawer-button ">
-                                <img width={40} className=" bg-orange-600 rounded-sm" src="/assets/hamburger.svg" alt="menu" />
+                                <img
+                                    width={40}
+                                    className=" bg-orange-600 rounded-sm"
+                                    src="/assets/hamburger.svg"
+                                    alt="menu"
+                                />
                             </label>
                         </div>
                         <div>
@@ -75,13 +80,13 @@ const Header = () => {
                                 Contact
                             </Link>
 
-                            {user && user.role !== "Citizen" && (
+                            {(!user || user.role !== "Citizen") && (
                                 <Link className="hover:underline" to={"/login"}>
                                     Login
                                 </Link>
                             )}
 
-                            {user.role === "Citizen" && (
+                            {user && user.role === "Citizen" && (
                                 <div className=" w-10 h-10 rounded-full bg-red-200">
                                     <Link to={"/profile"}>
                                         <div className=" w-full h-full object- overflow-hidden rounded-full">
@@ -104,7 +109,7 @@ const Header = () => {
                             <ul className="menu bg-gradient-to-tl from-[#000040] to-black text-lg  text-orange-500  space-y-5 min-h-full w-60 p-4 pl-10 ">
                                 <li className=" items-end">
                                     <label htmlFor="my-drawer-4" className="drawer-button ">
-                                        <img width={30 }  src="/assets/close.svg" alt="close" />
+                                        <img width={30} src="/assets/close.svg" alt="close" />
                                     </label>
                                 </li>
                                 <Link to="/" className=" hover:underline hover:bg-orange-200 rounded-md p-2 ">
@@ -126,13 +131,13 @@ const Header = () => {
                                 <Link to="/contact" className="hover:underline hover:bg-orange-200 rounded-md p-2">
                                     Contact
                                 </Link>
-                                {!user.username && (
+                                {(!user || user.role !== "Citizen") && (
                                     <Link to="/login" className="hover:underline hover:bg-orange-200 rounded-md p-2 ">
                                         <button className=" hover:underline">Login</button>
                                     </Link>
                                 )}
                                 <div className="  flex-1 flex items-end pb-5 ">
-                                    {user.role === "Citizen" && (
+                                    {user && user.role === "Citizen" && (
                                         <Link className=" flex items-center  gap-2" to={"/profile"}>
                                             <div className=" w-10  h-10 rounded-full overflow-hidden bg-red-50">
                                                 <img className=" h-full w-full object-cover" src={user.avatar} />
